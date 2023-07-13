@@ -1,0 +1,40 @@
+/* .App {
+  asd
+} */
+
+.App-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 70px;
+  padding-right: 15rem;
+  padding-left: 15rem;
+
+  background-color: #282c34;
+  color: white;
+}
+
+.App-logo {
+  color: inherit;
+  text-decoration: inherit;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.App-body {
+  padding-right: 15rem;
+  padding-left: 15rem;
+}
+
+.menu-item {
+  color: inherit;
+  text-decoration: inherit;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  cursor: pointer;
+
+}
+
+.menu-item:hover {
+  text-decoration: underline;
+}
