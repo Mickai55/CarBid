@@ -1,16 +1,20 @@
-/* .App {
-  asd
-} */
+:root {
+  --pagePadding: 25rem;
+}
+
+.App {
+  font-family: Georgia, serif;
+}
 
 .App-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   min-height: 70px;
-  padding-right: 15rem;
-  padding-left: 15rem;
+  padding-right: var(--pagePadding);
+  padding-left: var(--pagePadding);
 
-  background-color: #282c34;
+  background-color: #1b1f31;
   color: white;
 }
 
@@ -22,8 +26,9 @@
 }
 
 .App-body {
-  padding-right: 15rem;
-  padding-left: 15rem;
+  padding-right: var(--pagePadding);
+  padding-left: var(--pagePadding);
+  padding-top: 1rem;
 }
 
 .menu-item {

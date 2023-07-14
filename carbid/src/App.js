@@ -1,4 +1,4 @@
-import logo from "./logo.svg";
+import React from "react";
 import "./App.css";
 import { LuLogIn } from "react-icons/lu";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";

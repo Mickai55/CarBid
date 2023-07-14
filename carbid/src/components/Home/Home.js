@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Home = () => (
- <div data-testid="Home">
-    Home Component
+ <div className='h1' data-testid="Home">
+    Welcome to CarBid
  </div>
 );
 
