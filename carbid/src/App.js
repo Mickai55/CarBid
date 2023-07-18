@@ -6,6 +6,7 @@ import Home from 'components/Home/Home';
 import List from 'components/List/List';
 import History from 'components/History/History';
 import Login from 'components/Login/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 function App() {
   return (
@@ -30,6 +31,19 @@ function App() {
             <Route path="/history" element={<History/>} />
             <Route path="/login" element={<Login/>} />
           </Routes>
+        </div>
+        <div className="App-footer">
+          {/* <Routes>
+            <Route path="/" element={<Home/>} />
+            <Route path="/list" element={<List/>} />
+            <Route path="/history" element={<History/>} />
+            <Route path="/login" element={<Login/>} />
+          </Routes> */}
+          <div className="pt-3">
+            <span className="mx-3">Regulations</span>
+            <span className="mx-3">Terms and Conditions</span>
+            {false && <span className="mx-3">Logout <LogoutIcon style={{ height: 16 }} /></span>}
+          </div>
         </div>
       </div>
     </Router>

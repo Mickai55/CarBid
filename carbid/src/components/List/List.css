@@ -1,5 +1,11 @@
 .auction {
-    display: flex;
-    justify-content: space-between;
+    /* display: flex;
+    justify-content: space-between; */
     background-color: #f4f4f4;
+}
+
+.filters {
+    border: 1px solid var(--themeColor);
+    padding: 15px;
+    border-radius: 5px;
 }

@@ -1,5 +1,6 @@
 :root {
   --pagePadding: 25rem;
+  --themeColor: #1b1f31;
 }
 
 .App {
@@ -14,7 +15,7 @@
   padding-right: var(--pagePadding);
   padding-left: var(--pagePadding);
 
-  background-color: #1b1f31;
+  background-color: var(--themeColor);
   color: white;
 }
 
@@ -29,6 +30,11 @@
   padding-right: var(--pagePadding);
   padding-left: var(--pagePadding);
   padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  min-height: 83vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .menu-item {
@@ -42,4 +48,12 @@
 
 .menu-item:hover {
   text-decoration: underline;
+}
+
+.App-footer {
+  color: white;
+  background-color: var(--themeColor);
+  margin: auto 0;
+  min-height: 10vh;
+  text-align: center;
 }
