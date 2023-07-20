@@ -7,6 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { CardActions } from "@mui/material";
 import { MdTimer } from "react-icons/md";
+import CarAddDialog from "./CarAddDialog";
 
 const List = () => {
   // initiate cars
@@ -25,14 +26,21 @@ const List = () => {
   }
 
   const [cars, setCars] = useState(initialState);
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
 
   // every second update timer
   useEffect(() => {
     const interval = setInterval(() => {
-      setCars([...cars].map(x => {
-        x.biddingInfo.timeLeftSeconds--;
-        return x;
-      }));
+      setCars(
+        [...cars].map((x) => {
+          x.biddingInfo.timeLeftSeconds--;
+          return x;
+        })
+      );
     }, 1000);
 
     return () => {
@@ -42,7 +50,12 @@ const List = () => {
 
   return (
     <>
-      <div className="h3 text-center my-2">Auctions in progress</div>
+      <div className="d-flex justify-content-between align-items-center">
+        <div></div>
+        <div className="h3 my-2">Auctions in progress</div>
+        <Button onClick={handleClickOpenDialog} variant="contained">Add Car</Button>
+        <CarAddDialog open={openDialog} setOpenDialog={setOpenDialog}/>
+      </div>
       <div className="filters mx-2 my-3"> Filters</div>
       <div className="d-flex flex-wrap" data-testid="List">
         {cars.map((car) => (
@@ -64,12 +77,16 @@ const List = () => {
             </CardContent>
             <CardActions className="auction">
               <div className="row w-100 align-items-center">
-              <span className="col-4 text-center">
-                <MdTimer />
-                {formatTime(car.biddingInfo.timeLeftSeconds)}
-              </span>
-              <span className="col-4 text-center">{car.biddingInfo.currentPrice}$</span>
-              <span className="col-4 text-center" style={{paddingLeft: 60}}><Button variant="outlined">Bid</Button></span>
+                <span className="col-4 text-center">
+                  <MdTimer />
+                  {formatTime(car.biddingInfo.timeLeftSeconds)}
+                </span>
+                <span className="col-4 text-center">
+                  {car.biddingInfo.currentPrice}$
+                </span>
+                <span className="col-4 text-center" style={{ paddingLeft: 60 }}>
+                  <Button variant="outlined">Bid</Button>
+                </span>
               </div>
             </CardActions>
           </Card>
