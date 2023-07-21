@@ -3,16 +3,15 @@ import Input from "@mui/material/Input";
 import MenuItem from "@mui/material/MenuItem";
 import { Controller, useForm } from "react-hook-form";
 
-const { default: Button } = require("@mui/material/Button");
-const { default: Dialog } = require("@mui/material/Dialog");
-const { default: DialogActions } = require("@mui/material/DialogActions");
-const { default: DialogContent } = require("@mui/material/DialogContent");
-const {
-  default: DialogContentText,
-} = require("@mui/material/DialogContentText");
-const { default: DialogTitle } = require("@mui/material/DialogTitle");
-const { default: TextField } = require("@mui/material/TextField");
-const { default: React } = require("react");
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import TextField from "@mui/material/TextField";
+import {useState} from "react";
+import React from "react";
 
 const CarAddDialog = (props) => {
   const handleCloseDialog = () => {
@@ -50,6 +49,9 @@ const CarAddDialog = (props) => {
     },
   ];
 
+  const today = new Date().toISOString().slice(0, 10);
+  const [minDate, setMinDate] = useState(today);
+
   const {
     formState: { errors },
     handleSubmit,
@@ -61,18 +63,18 @@ const CarAddDialog = (props) => {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
+    props.func(data);
   };
 
   return (
     <>
       <Dialog open={props.open} onClose={handleCloseDialog}>
-        <DialogTitle>Subscribe</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please add the car that you want to bid
-          </DialogContentText>
-          <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogTitle>Bid Car</DialogTitle>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogContent>
+            <DialogContentText>
+              Please add the car that you want to bid
+            </DialogContentText>
             <Box
               component="div"
               sx={{
@@ -244,7 +246,6 @@ const CarAddDialog = (props) => {
                   control={control}
                   defaultValue=""
                 />
-
                 <Controller
                   render={({ field }) => (
                     <TextField
@@ -266,15 +267,52 @@ const CarAddDialog = (props) => {
                   defaultValue=""
                 />
               </div>
-              <div></div>
+              <div>
+                <Controller
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      InputLabelProps={{ shrink: true }}
+                      variant="standard"
+                      label="Listing Time"
+                      type="date"
+                      InputProps={{ inputProps: { min: today } }}
+                      onChange={(e) => {
+                        setMinDate(e.target.value);
+                        field.onChange(e.target.value);
+                      }}
+                    />
+                  )}
+                  name="listingTime"
+                  control={control}
+                  defaultValue={today}
+                />
+                <Controller
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      InputLabelProps={{ shrink: true }}
+                      variant="standard"
+                      label="Selling Time"
+                      type="date"
+                      onChange={(e) => field.onChange(e.target.value)}
+                      InputProps={{ inputProps: { min: minDate } }}
+                    />
+                  )}
+                  name="sellingTime"
+                  control={control}
+                  defaultValue=""
+                />
+              </div>
             </Box>
-            <input type="submit" name="Submit" />
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleCloseDialog}>Subscribe</Button>
-        </DialogActions>
+          </DialogContent>
+          <DialogActions >
+            <Button onClick={handleCloseDialog}>Cancel</Button>
+            <Button type="submit" name="Submit">
+              Submit
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </>
   );

@@ -7,6 +7,7 @@ import List from 'components/List/List';
 import History from 'components/History/History';
 import Login from 'components/Login/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
+import Details from "components/Details/Details";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="/list" element={<List/>} />
             <Route path="/history" element={<History/>} />
             <Route path="/login" element={<Login/>} />
+            <Route path="/details" element={<Details/>} />
           </Routes>
         </div>
         <div className="App-footer">
