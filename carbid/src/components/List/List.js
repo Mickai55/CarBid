@@ -9,6 +9,7 @@ import { CardActions } from "@mui/material";
 import { MdTimer } from "react-icons/md";
 import CarAddDialog from "./CarAddDialog";
 import { Link } from "react-router-dom";
+import { formatTime } from "Helpers";
 
 const List = () => {
   // initiate cars
@@ -21,32 +22,36 @@ const List = () => {
     { ...car, biddingInfo: { ...car.biddingInfo } },
   ];
 
+  const tempTimers = []
+
+  for (let car of initialState) {
+    tempTimers.push(car.biddingInfo.sellingTime);
+  }
+
   for (let car of initialState) {
     car.id = Math.random();
-    car.biddingInfo.timeLeftSeconds = Math.floor(Math.random() * 10000 + 1000);
   }
 
   const [cars, setCars] = useState(initialState);
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [timers, setTimers] = useState([]);
 
   const handleClickOpenDialog = () => {
     setOpenDialog(true);
   };
 
+  const updateTimers = () => {
+    const formattedTimers = [];
+    for (let timer of tempTimers) {
+      formattedTimers.push(formatTime(timer));
+    }
+    setTimers(formattedTimers);
+  }
+
   // every second update timer
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCars(
-        [...cars].map((x) => {
-          x.biddingInfo.timeLeftSeconds--;
-          return x;
-        })
-      );
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
+    updateTimers();
+    setInterval(updateTimers, 1000);
   }, []);
 
   const output = (data) => {
@@ -70,8 +75,8 @@ const List = () => {
       </div>
       <div className="filters mx-2 my-3"> Filters</div>
       <div className="d-flex flex-wrap" data-testid="List">
-        {cars.map((car) => (
-          <Card key={car.id} sx={{ width: 394, margin: 1 }} className="card">
+        {cars.map((car, index) => (
+          <Card key={car.id} sx={{ width: 390, margin: 1 }} className="card">
             <Link to="/details" className="link">
               <CardMedia
                 sx={{ height: 200 }}
@@ -80,7 +85,7 @@ const List = () => {
               />
               <CardContent>
                 <Typography className="fw-bold" gutterBottom component="div">
-                  {car.fabricationYear} {car.brand} {car.type}
+                  {car.fabricationYear} {car.brand} {car.model}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {car.fuelType}, {car.engineSize}, {car.fabricationYear},{" "}
@@ -93,7 +98,7 @@ const List = () => {
               <div className="row w-100 align-items-center">
                 <span className="col-4 text-center">
                   <MdTimer />
-                  {formatTime(car.biddingInfo.timeLeftSeconds)}
+                  {timers[index]}
                 </span>
                 <span className="col-4 text-center">
                   {car.biddingInfo.currentPrice}$
@@ -113,7 +118,7 @@ const List = () => {
 const car = {
   id: 1,
   brand: "Ford",
-  type: "Focus",
+  model: "Focus",
   fabricationYear: "2013",
   fuelType: "diesel",
   transmissionType: "automatic",
@@ -128,22 +133,10 @@ const car = {
   biddingInfo: {
     startingPrice: 5000,
     currentPrice: 6000,
-    listingTime: "17.07.2023 18:00:00",
-    timeLeftSeconds: 10000,
+    listingTime: "2023-07-22",
+    sellingTime: "2023-07-25"
   },
 };
-
-function formatTime(seconds) {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
-
-  const formattedHours = String(hours).padStart(2, "0");
-  const formattedMinutes = String(minutes).padStart(2, "0");
-  const formattedSeconds = String(remainingSeconds).padStart(2, "0");
-
-  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-}
 
 List.propTypes = {};
 

@@ -1,24 +1,24 @@
 .auction {
-    /* display: flex;
+  /* display: flex;
     justify-content: space-between; */
-    background-color: #f4f4f4;
+  background-color: #f4f4f4;
 }
 
 .filters {
-    border: 1px solid var(--themeColor);
-    padding: 15px;
-    border-radius: 5px;
+  border: 1px solid var(--themeColor);
+  padding: 15px;
+  border-radius: 5px;
 }
 
 .link {
-    color: inherit;
-    text-decoration: inherit;
+  color: inherit;
+  text-decoration: inherit;
 }
 
 .card {
   transition: box-shadow 1s;
 }
 
-.card:hover {  
-    box-shadow: 0 5px 5px rgba(57, 57, 57, 0.7);
+.card:hover {
+  box-shadow: 0 5px 5px rgba(57, 57, 57, 0.7);
 }

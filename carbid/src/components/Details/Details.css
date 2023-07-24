@@ -1,10 +1,31 @@
 .album {
-    text-align: center;
 }
 
 .image {
-    max-width: 80%;
-    height: auto;
+  max-width: 80%;
+  height: auto;
 }
 
+table {
+  border: 1px solid #b4b4b4;
+}
 
+td {
+  height: 40px;
+  border: 1px solid #b4b4b4 !important;
+  padding-left: 15px;
+}
+
+td:nth-child(odd) {
+  background-color: #1b1f310d;
+  font-weight: bold;
+}
+
+.auction-bidbar {
+  display: flex;
+  align-items: center;
+  background-color: #1b1f31f4;
+  border-radius: 5px;
+  color: white;
+  height: 50px;
+}
