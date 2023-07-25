@@ -134,7 +134,7 @@ const car = {
     startingPrice: 5000,
     currentPrice: 6000,
     listingTime: "2023-07-22",
-    sellingTime: "2023-07-25"
+    sellingTime: "2023-07-28"
   },
 };
 

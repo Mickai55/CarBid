@@ -21,7 +21,7 @@ function App() {
             <Link to="/list" className="menu-item">Bidding</Link>
             <Link to="/history" className="menu-item">History</Link>
             <Link to="/login" className="menu-item">
-              Login <LuLogIn />
+              <span>Login <LuLogIn /></span>
             </Link>
           </div>
         </header>
@@ -35,12 +35,6 @@ function App() {
           </Routes>
         </div>
         <div className="App-footer">
-          {/* <Routes>
-            <Route path="/" element={<Home/>} />
-            <Route path="/list" element={<List/>} />
-            <Route path="/history" element={<History/>} />
-            <Route path="/login" element={<Login/>} />
-          </Routes> */}
           <div className="pt-3">
             <span className="mx-3">Regulations</span>
             <span className="mx-3">Terms and Conditions</span>

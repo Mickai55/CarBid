@@ -4,6 +4,7 @@ import "./Details.css";
 import { MdTimer } from "react-icons/md";
 import { formatTime } from "Helpers";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 
 const Details = (props) => {
   const [timer, setTimer] = useState("");
@@ -38,13 +39,23 @@ const Details = (props) => {
           </div>
         </span>
         <span className="col-4 text-center"></span>
-        <span className="col-4" style={{ textAlign: "right", paddingRight: "20px" }}>
-          <Button variant="contained" className="mr-5">
-            Bid
-          </Button>
+        <span
+          className="col-4"
+          style={{ textAlign: "right", paddingRight: "30px" }}
+        >
+          <div>
+            <input
+              type="number"
+              className="new-price"
+              defaultValue={car.biddingInfo.currentPrice}
+              step={50}
+            ></input>
+            <Button variant="contained">Bid</Button>
+          </div>
         </span>
       </div>
-      <table className="my-4">
+      <h3 className="mt-4">Vehicle Details</h3>
+      <table className="my-3">
         <tbody>
           <tr>
             <td>Brand</td>
@@ -136,7 +147,7 @@ const car = {
     currentPrice: 6000,
     numberOfBids: 7,
     listingTime: "2023-07-22",
-    sellingTime: "2023-07-25",
+    sellingTime: "2023-07-28",
   },
 };
 

@@ -29,3 +29,9 @@ td:nth-child(odd) {
   color: white;
   height: 50px;
 }
+
+.new-price {
+  width: 90px;
+  margin-right: 15px;
+  border-radius: 5px;
+}
