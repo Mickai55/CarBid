@@ -10,29 +10,12 @@ import { MdTimer } from "react-icons/md";
 import CarAddDialog from "./CarAddDialog";
 import { Link } from "react-router-dom";
 import { formatTime } from "Helpers";
+import { getCars } from "Service";
 
 const List = () => {
-  // initiate cars
-  const initialState = [
-    { ...car, biddingInfo: { ...car.biddingInfo } },
-    { ...car, biddingInfo: { ...car.biddingInfo } },
-    { ...car, biddingInfo: { ...car.biddingInfo } },
-    { ...car, biddingInfo: { ...car.biddingInfo } },
-    { ...car, biddingInfo: { ...car.biddingInfo } },
-    { ...car, biddingInfo: { ...car.biddingInfo } },
-  ];
+  const tempTimers = [];
 
-  const tempTimers = []
-
-  for (let car of initialState) {
-    tempTimers.push(car.biddingInfo.sellingTime);
-  }
-
-  for (let car of initialState) {
-    car.id = Math.random();
-  }
-
-  const [cars, setCars] = useState(initialState);
+  const [cars, setCars] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [timers, setTimers] = useState([]);
 
@@ -46,11 +29,17 @@ const List = () => {
       formattedTimers.push(formatTime(timer));
     }
     setTimers(formattedTimers);
-  }
+  };
 
-  // every second update timer
   useEffect(() => {
-    updateTimers();
+    getCars().then((cars) => {
+      for (let car of cars) {
+        tempTimers.push(car.biddingInfo.sellingTime);
+      }
+      updateTimers();
+      setCars(cars);
+    });
+    // every second update timer
     setInterval(updateTimers, 1000);
   }, []);
 
@@ -76,7 +65,11 @@ const List = () => {
       <div className="filters mx-2 my-3"> Filters</div>
       <div className="d-flex flex-wrap" data-testid="List">
         {cars.map((car, index) => (
-          <Card key={car.id} sx={{ width: 390, margin: 1 }} className="card">
+          <Card
+            key={car.id}
+            sx={{ width: 390, margin: 1, justifyContent: "space-between" }}
+            className="card"
+          >
             <Link to="/details" className="link">
               <CardMedia
                 sx={{ height: 200 }}
@@ -113,29 +106,6 @@ const List = () => {
       </div>
     </>
   );
-};
-
-const car = {
-  id: 1,
-  brand: "Ford",
-  model: "Focus",
-  fabricationYear: "2013",
-  fuelType: "diesel",
-  transmissionType: "automatic",
-  mileage: "210000 km",
-  power: "120 kW (163 Hp)",
-  engineSize: "1,995 cc",
-  bodyType: "hatchback",
-  description: "",
-  pictures: [],
-  numberOfSeats: 5,
-  color: "Grey",
-  biddingInfo: {
-    startingPrice: 5000,
-    currentPrice: 6000,
-    listingTime: "2023-07-22",
-    sellingTime: "2023-07-28"
-  },
 };
 
 List.propTypes = {};

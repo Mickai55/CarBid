@@ -12,6 +12,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import {useState} from "react";
 import React from "react";
+import { addCar } from "Service";
 
 const CarAddDialog = (props) => {
   const handleCloseDialog = () => {
@@ -30,24 +31,7 @@ const CarAddDialog = (props) => {
     "Audi",
   ];
 
-  const currencies = [
-    {
-      value: "USD",
-      label: "$",
-    },
-    {
-      value: "EUR",
-      label: "€",
-    },
-    {
-      value: "BTC",
-      label: "฿",
-    },
-    {
-      value: "JPY",
-      label: "¥",
-    },
-  ];
+  const currencies = ['$', "€", 'RON', "฿"];
 
   const today = new Date().toISOString().slice(0, 10);
   const [minDate, setMinDate] = useState(today);
@@ -62,43 +46,25 @@ const CarAddDialog = (props) => {
     mode: "onChange",
   });
 
-  const onSubmit = (data) => {
-    props.func(data);
+  const onSubmitForm = (car) => {
+    const uid = Math.random().toString().substr(14) + new Date().toISOString().toString();
+    car.id = uid;
+    car.currentPrice = car.startingPrice;
+    car.pictures = [];
+    car.numberOfBids = 0;
+    onSubmitTest(car);
   };
 
-  
-
-
-
-
-
-
-  async function onSubmitTest(e) {
-    e.preventDefault();
-  
-    // When a post request is sent to the create url, we'll add a new record to the database.
-    const form = { name: "", position: "", level: "" };
-    const newPerson = { ...form };
-  
-    await fetch("http://localhost:5050/record", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newPerson),
-    })
-    .catch(error => {
-      window.alert(error);
-      return;
-    });
-  
+  function onSubmitTest(car) {
+    console.log(car);
+    addCar(car);
   }
 
   return (
     <>
       <Dialog open={props.open} onClose={handleCloseDialog}>
         <DialogTitle>Bid Car</DialogTitle>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmitForm)}>
           <DialogContent>
             <DialogContentText>
               Please add the car that you want to bid
@@ -148,7 +114,7 @@ const CarAddDialog = (props) => {
                       variant="standard"
                     />
                   )}
-                  name="year"
+                  name="fabricationYear"
                   control={control}
                   defaultValue=""
                 />
@@ -174,7 +140,7 @@ const CarAddDialog = (props) => {
                       </MenuItem>
                     </TextField>
                   )}
-                  name="fuel"
+                  name="fuelType"
                   control={control}
                   defaultValue=""
                 />
@@ -196,7 +162,7 @@ const CarAddDialog = (props) => {
                       </MenuItem>
                     </TextField>
                   )}
-                  name="transmission"
+                  name="transmissionType"
                   control={control}
                   defaultValue=""
                 />
@@ -246,7 +212,7 @@ const CarAddDialog = (props) => {
                       type="number"
                     />
                   )}
-                  name="seats"
+                  name="numberOfSeats"
                   control={control}
                   defaultValue=""
                 />
@@ -284,8 +250,8 @@ const CarAddDialog = (props) => {
                       label="Currency"
                     >
                       {currencies.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+                        <MenuItem key={option} value={option}>
+                          {option}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -341,7 +307,6 @@ const CarAddDialog = (props) => {
             </Button>
           </DialogActions>
         </form>
-        <Button onClick={onSubmitTest}> add </Button>
       </Dialog>
     </>
   );

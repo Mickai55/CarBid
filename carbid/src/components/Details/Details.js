@@ -145,6 +145,7 @@ const car = {
   biddingInfo: {
     startingPrice: 5000,
     currentPrice: 6000,
+    currency: '$',
     numberOfBids: 7,
     listingTime: "2023-07-22",
     sellingTime: "2023-07-28",
