@@ -31,7 +31,7 @@ function App() {
             <Route path="/list" element={<List/>} />
             <Route path="/history" element={<History/>} />
             <Route path="/login" element={<Login/>} />
-            <Route path="/details" element={<Details/>} />
+            <Route path="/details/:id" element={<Details/>} />
           </Routes>
         </div>
         <div className="App-footer">

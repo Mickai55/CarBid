@@ -35,4 +35,26 @@ const addCar = async (car) => {
   });
 };
 
-export { getCars, addCar };
+const getCar = async (id) => {
+  try {
+    const response = await fetch(`${baseUrl}/cars/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch data');
+    }
+
+    const data = await response.json();
+    return data;
+    
+  } catch (error) {
+    window.alert(error);
+    return null;
+  }
+}
+
+export { getCars, addCar, getCar };

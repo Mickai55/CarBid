@@ -43,4 +43,15 @@ router.post("/", async (req, res) => {
   res.send(result).status(204);
 });
 
+// This section will help you get a single car by id
+router.get("/:id", async (req, res) => {
+  console.log(req.params);
+  let collection = await db.collection("cars");
+  let query = {id: req.params.id};
+  let result = await collection.findOne(query);
+
+  if (!result) res.send("Not found").status(404);
+  else res.send(result).status(200);
+});
+
 export default router;

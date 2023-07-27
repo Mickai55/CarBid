@@ -1,7 +1,7 @@
 :root {
   --pagePadding: 20%;
-  /* --themeColor: #1b1f31; */
-  --themeColor: linear-gradient(-10deg, #000000 0%, #101836 50%, #040c34 75%);
+  --themeColor: #1b1f31;
+  --themeGradient: linear-gradient(-10deg, #000000 0%, #101836 50%, #040c34 75%);
 }
 
 .App {
@@ -16,7 +16,7 @@
   padding-right: var(--pagePadding);
   padding-left: var(--pagePadding);
 
-  background-image: var(--themeColor);
+  background-image: var(--themeGradient);
   color: white;
 }
 
@@ -52,7 +52,7 @@
 
 .App-footer {
   color: white;
-  background-image: var(--themeColor);
+  background-image: var(--themeGradient);
   margin: auto 0;
   min-height: 10vh;
   text-align: center;
