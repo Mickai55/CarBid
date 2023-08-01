@@ -15,14 +15,12 @@ const Details = (props) => {
   const carRef = useRef(null);
 
   const updateTimer = () => {
-    console.log(carRef);
     if (carRef.current) {
       setTimer(formatTime(carRef.current.biddingInfo.sellingTime));
     }
   };
 
   useEffect(() => {
-    console.log(routeParams);
     getCar(routeParams.id).then((r) => {
       setCar(r);
       carRef.current = r;

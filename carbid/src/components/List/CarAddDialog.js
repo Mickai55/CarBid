@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Input from "@mui/material/Input";
 import MenuItem from "@mui/material/MenuItem";
-import { Controller, useForm } from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -10,9 +10,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import React from "react";
-import { addCar } from "Service";
+import {addCar} from "Service";
 
 const CarAddDialog = (props) => {
   const handleCloseDialog = () => {
@@ -30,14 +30,14 @@ const CarAddDialog = (props) => {
     "Mercedes-Benz",
     "Audi",
   ];
-
   const currencies = ['$', "€", 'RON', "฿"];
 
   const today = new Date().toISOString().slice(0, 10);
   const [minDate, setMinDate] = useState(today);
+  const [uploadedFiles, setUploadedFiles] = useState([])
 
   const {
-    formState: { errors },
+    formState: {errors},
     handleSubmit,
     watch,
     trigger,
@@ -60,9 +60,26 @@ const CarAddDialog = (props) => {
     addCar(car);
   }
 
+  const handleFileEvent = (e) => {
+    for (let file of e.target.files) {
+      console.log(file)
+      setUploadedFiles((prevUploadedFiles) => [
+        ...prevUploadedFiles,
+        URL.createObjectURL(file)
+      ]);
+    }
+  }
+
   return (
     <>
-      <Dialog open={props.open} onClose={handleCloseDialog}>
+      <Dialog open={props.open} onClose={handleCloseDialog} sx={{
+        "& .MuiDialog-container": {
+          "& .MuiPaper-root": {
+            width: "100%",
+            maxWidth: "40vw",
+          },
+        },
+      }}>
         <DialogTitle>Bid Car</DialogTitle>
         <form onSubmit={handleSubmit(onSubmitForm)}>
           <DialogContent>
@@ -72,12 +89,12 @@ const CarAddDialog = (props) => {
             <Box
               component="div"
               sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
+                "& .MuiTextField-root": {m: 1, width: "45%"},
               }}
             >
               <div>
                 <Controller
-                  render={({ field }) => (
+                  render={({field}) => (
                     <TextField
                       select
                       label="Brand"
@@ -96,8 +113,8 @@ const CarAddDialog = (props) => {
                   defaultValue=""
                 />
                 <Controller
-                  render={({ field }) => (
-                    <TextField {...field} variant="standard" label="Model" />
+                  render={({field}) => (
+                    <TextField {...field} variant="standard" label="Model"/>
                   )}
                   name="model"
                   control={control}
@@ -106,7 +123,7 @@ const CarAddDialog = (props) => {
               </div>
               <div>
                 <Controller
-                  render={({ field }) => (
+                  render={({field}) => (
                     <TextField
                       {...field}
                       label="Fabrication Year"
@@ -119,7 +136,7 @@ const CarAddDialog = (props) => {
                   defaultValue=""
                 />
                 <Controller
-                  render={({ field }) => (
+                  render={({field}) => (
                     <TextField
                       {...field}
                       select
@@ -147,7 +164,7 @@ const CarAddDialog = (props) => {
               </div>
               <div>
                 <Controller
-                  render={({ field }) => (
+                  render={({field}) => (
                     <TextField
                       {...field}
                       select
@@ -167,7 +184,7 @@ const CarAddDialog = (props) => {
                   defaultValue=""
                 />
                 <Controller
-                  render={({ field }) => (
+                  render={({field}) => (
                     <TextField
                       {...field}
                       variant="standard"
@@ -182,15 +199,15 @@ const CarAddDialog = (props) => {
               </div>
               <div>
                 <Controller
-                  render={({ field }) => (
-                    <TextField {...field} variant="standard" label="Power" />
+                  render={({field}) => (
+                    <TextField {...field} variant="standard" label="Power"/>
                   )}
                   name="power"
                   control={control}
                   defaultValue=""
                 />
                 <Controller
-                  render={({ field }) => (
+                  render={({field}) => (
                     <TextField
                       {...field}
                       variant="standard"
@@ -204,7 +221,7 @@ const CarAddDialog = (props) => {
               </div>
               <div>
                 <Controller
-                  render={({ field }) => (
+                  render={({field}) => (
                     <TextField
                       {...field}
                       variant="standard"
@@ -217,18 +234,18 @@ const CarAddDialog = (props) => {
                   defaultValue=""
                 />
                 <Controller
-                  render={({ field }) => (
-                    <TextField {...field} variant="standard" label="Color" />
+                  render={({field}) => (
+                    <TextField {...field} variant="standard" label="Color"/>
                   )}
                   name="color"
                   control={control}
                   defaultValue=""
                 />
               </div>
-              <div className="m-3">Bidding Info</div>
+              <div className="fw-bold mt-3 ml-3">Bidding Info</div>
               <div>
                 <Controller
-                  render={({ field }) => (
+                  render={({field}) => (
                     <TextField
                       {...field}
                       variant="standard"
@@ -241,7 +258,7 @@ const CarAddDialog = (props) => {
                   defaultValue=""
                 />
                 <Controller
-                  render={({ field }) => (
+                  render={({field}) => (
                     <TextField
                       {...field}
                       select
@@ -263,14 +280,14 @@ const CarAddDialog = (props) => {
               </div>
               <div>
                 <Controller
-                  render={({ field }) => (
+                  render={({field}) => (
                     <TextField
                       {...field}
-                      InputLabelProps={{ shrink: true }}
+                      InputLabelProps={{shrink: true}}
                       variant="standard"
                       label="Listing Time"
                       type="date"
-                      InputProps={{ inputProps: { min: today } }}
+                      InputProps={{inputProps: {min: today}}}
                       onChange={(e) => {
                         setMinDate(e.target.value);
                         field.onChange(e.target.value);
@@ -282,15 +299,15 @@ const CarAddDialog = (props) => {
                   defaultValue={today}
                 />
                 <Controller
-                  render={({ field }) => (
+                  render={({field}) => (
                     <TextField
                       {...field}
-                      InputLabelProps={{ shrink: true }}
+                      InputLabelProps={{shrink: true}}
                       variant="standard"
                       label="Selling Time"
                       type="date"
                       onChange={(e) => field.onChange(e.target.value)}
-                      InputProps={{ inputProps: { min: minDate } }}
+                      InputProps={{inputProps: {min: minDate}}}
                     />
                   )}
                   name="sellingTime"
@@ -299,8 +316,34 @@ const CarAddDialog = (props) => {
                 />
               </div>
             </Box>
+
+            <Button
+              className="mt-3"
+              variant="contained"
+              component="label"
+            >
+              Upload Photos
+              <input
+                onChange={handleFileEvent}
+                type="file"
+                multiple
+                hidden
+              />
+            </Button>
+            <div className="mt-4 d-flex w-100 flex-wrap">
+              {uploadedFiles && (
+                uploadedFiles.map((file, index) => (
+                  <img
+                    key={index}
+                    style={{height: 100, margin: 10}}
+                    src={file}
+                  />
+                ))
+              )
+              }
+            </div>
           </DialogContent>
-          <DialogActions >
+          <DialogActions>
             <Button onClick={handleCloseDialog}>Cancel</Button>
             <Button type="submit" name="Submit">
               Submit
@@ -311,5 +354,6 @@ const CarAddDialog = (props) => {
     </>
   );
 };
+
 
 export default CarAddDialog;

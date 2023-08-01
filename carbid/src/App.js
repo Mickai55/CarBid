@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
-import { LuLogIn } from "react-icons/lu";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import {LuLogIn} from "react-icons/lu";
+import {BrowserRouter as Router, Route, Routes, Link} from "react-router-dom";
 import Home from 'components/Home/Home';
 import List from 'components/List/List';
 import History from 'components/History/History';
@@ -21,24 +21,24 @@ function App() {
             <Link to="/list" className="menu-item">Bidding</Link>
             <Link to="/history" className="menu-item">History</Link>
             <Link to="/login" className="menu-item">
-              <span>Login <LuLogIn /></span>
+              <span>Login <LuLogIn/></span>
             </Link>
           </div>
         </header>
         <div className="App-body">
           <Routes>
-            <Route path="/" element={<Home/>} />
-            <Route path="/list" element={<List/>} />
-            <Route path="/history" element={<History/>} />
-            <Route path="/login" element={<Login/>} />
-            <Route path="/details/:id" element={<Details/>} />
+            <Route path="/" element={<Home/>}/>
+            <Route path="/list" element={<List/>}/>
+            <Route path="/history" element={<History/>}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/details/:id" element={<Details/>}/>
           </Routes>
         </div>
         <div className="App-footer">
           <div className="pt-3">
             <span className="mx-3">Regulations</span>
             <span className="mx-3">Terms and Conditions</span>
-            {false && <span className="mx-3">Logout <LogoutIcon style={{ height: 16 }} /></span>}
+            {false && <span className="mx-3">Logout <LogoutIcon style={{height: 16}}/></span>}
           </div>
         </div>
       </div>

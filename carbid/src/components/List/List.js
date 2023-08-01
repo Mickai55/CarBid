@@ -14,6 +14,8 @@ import { getCars } from "Service";
 
 const List = () => {
   const tempTimers = [];
+  let pageLoading = true;
+  let pageError = false;
 
   const [cars, setCars] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -34,6 +36,9 @@ const List = () => {
   useEffect(() => {
     getCars().then((cars) => {
       console.log(cars);
+      if (!cars) {
+        return;
+      }
       for (let car of cars) {
         tempTimers.push(car.biddingInfo.sellingTime);
       }
@@ -51,7 +56,7 @@ const List = () => {
 
   return (
     <>
-      {cars.length === 0 ? (
+      {cars === null || cars.length === 0 ? (
         <div>Loading...</div>
       ) : (
         <>
@@ -72,7 +77,7 @@ const List = () => {
             {cars.map((car, index) => (
               <Card
                 key={car.id}
-                sx={{ width: 390, margin: 1, justifyContent: "space-between" }}
+                sx={{ width: '18.9vw', margin: 1, justifyContent: "space-between" }}
                 className="card"
               >
                 <Link to={`/details/${car.id}`} className="link">
