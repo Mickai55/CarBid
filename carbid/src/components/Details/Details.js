@@ -39,7 +39,7 @@ const Details = (props) => {
             {car.fabricationYear} {car.brand} {car.model}
           </h3>
           <div className="album mt-2">
-            <CarGallery />
+            <CarGallery images={car.pictures} />
           </div>
 
           <div className="auction-bidbar mt-4">
@@ -110,36 +110,22 @@ const Details = (props) => {
   );
 };
 
-const images = [
-  {
-    original:
-      "https://ruswagen.ro/wp-content/uploads/2023/03/331535315_130289899726177_8514068368407989318_n-876x535.jpg",
-    thumbnail:
-      "https://ruswagen.ro/wp-content/uploads/2023/03/331535315_130289899726177_8514068368407989318_n-876x535.jpg",
-  },
-  {
-    original:
-      "https://ruswagen.ro/wp-content/uploads/2023/03/331535315_130289899726177_8514068368407989318_n-876x535.jpg",
-    thumbnail:
-      "https://ruswagen.ro/wp-content/uploads/2023/03/331535315_130289899726177_8514068368407989318_n-876x535.jpg",
-  },
-  {
-    original:
-      "https://ruswagen.ro/wp-content/uploads/2023/03/331535315_130289899726177_8514068368407989318_n-876x535.jpg",
-    thumbnail:
-      "https://ruswagen.ro/wp-content/uploads/2023/03/331535315_130289899726177_8514068368407989318_n-876x535.jpg",
-  },
-];
-
 class CarGallery extends React.Component {
   render() {
+    const { images } = this.props;
+
     return (
-      <ImageGallery
-        items={images}
-        thumbnailPosition="right"
-        showBullets={true}
-        showPlayButton={false}
-      />
+      <>
+        <ImageGallery
+          items={images.map((image) => ({
+            original: image.file,
+            thumbnail: image.file,
+          }))}
+          thumbnailPosition="right"
+          showBullets={true}
+          showPlayButton={false}
+        />
+      </>
     );
   }
 }

@@ -1,7 +1,6 @@
 .auction {
-  /* display: flex;
-    justify-content: space-between; */
   background-color: #f4f4f4;
+  padding-right: 0;
 }
 
 .filters {
@@ -15,8 +14,13 @@
   text-decoration: inherit;
 }
 
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
 .card {
-  transition: transform 1s; 
+  transition: transform .2s;
 }
 
 .card:hover {

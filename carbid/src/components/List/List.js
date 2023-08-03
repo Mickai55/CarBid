@@ -35,7 +35,6 @@ const List = () => {
 
   useEffect(() => {
     getCars().then((cars) => {
-      console.log(cars);
       if (!cars) {
         return;
       }
@@ -73,17 +72,24 @@ const List = () => {
             />
           </div>
           <div className="filters mx-2 my-3"> Filters</div>
-          <div className="d-flex flex-wrap" data-testid="List">
+          <div className="grid-container" data-testid="List">
             {cars.map((car, index) => (
               <Card
                 key={car.id}
-                sx={{ width: '18.9vw', margin: 1, justifyContent: "space-between" }}
+                sx={{
+                  width: "auto",
+                  margin: 1,
+                  justifyContent: "space-between",
+                }}
                 className="card"
               >
                 <Link to={`/details/${car.id}`} className="link">
                   <CardMedia
                     sx={{ height: 200 }}
-                    image="https://ruswagen.ro/wp-content/uploads/2023/03/331535315_130289899726177_8514068368407989318_n-876x535.jpg"
+                    image={
+                      car.pictures[0]?.file ??
+                      "https://static.vecteezy.com/system/resources/previews/007/626/807/original/toy-car-for-2d-cartoon-animation-city-cars-and-vehicles-transport-free-vector.jpg"
+                    }
                     title={car.brand}
                   />
                   <CardContent>
@@ -110,10 +116,7 @@ const List = () => {
                     <span className="col-4 text-center">
                       {car.biddingInfo.currentPrice}$
                     </span>
-                    <span
-                      className="col-4 text-center"
-                      style={{ paddingLeft: 60 }}
-                    >
+                    <span className="col-4" style={{ textAlign: "right" }}>
                       <Button variant="outlined">Bid</Button>
                     </span>
                   </div>
