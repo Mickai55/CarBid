@@ -53,4 +53,50 @@ router.get("/:id", async (req, res) => {
   else res.send(result).status(200);
 });
 
+// This section will help you update a car by id.
+router.patch("/:id", async (req, res) => {
+  let query = {id: req.params.id};
+  const updates =  {
+    $set: {
+      id: req.body.id,
+      brand: req.body.brand,
+      model: req.body.model,
+      fabricationYear: req.body.fabricationYear,
+      fuelType: req.body.fuelType,
+      transmissionType: req.body.transmissionType,
+      mileage: req.body.mileage,
+      power: req.body.power,
+      engineSize: req.body.engineSize,
+      bodyType: req.body.bodyType,
+      description: req.body.description,
+      pictures: req.body.pictures,
+      numberOfSeats: req.body.numberOfSeats,
+      color: req.body.color,
+      biddingInfo: {
+        startingPrice: req.body.startingPrice,
+        currentPrice: req.body.currentPrice,
+        currency: req.body.currency,
+        numberOfBids: req.body.numberOfBids,
+        listingTime: req.body.listingTime,
+        sellingTime: req.body.sellingTime,
+      },
+    }
+  };
+
+  let collection = await db.collection("cars");
+  let result = await collection.updateOne(query, updates);
+
+  res.send(result).status(200);
+});
+
+// This section will help you delete a car
+router.delete("/:id", async (req, res) => {
+  let query = {id: req.params.id};
+
+  const collection = db.collection("cars");
+  let result = await collection.deleteOne(query);
+
+  res.send(result).status(200);
+});
+
 export default router;

@@ -34,7 +34,13 @@ const List = () => {
   };
 
   useEffect(() => {
-    getCars().then((cars) => {
+    fetchCars().then();
+    // every second update timer
+    setInterval(updateTimers, 1000);
+  }, []);
+
+  const fetchCars = () => {
+    return getCars().then((cars) => {
       if (!cars) {
         return;
       }
@@ -44,12 +50,11 @@ const List = () => {
       updateTimers();
       setCars(cars);
     });
-    // every second update timer
-    setInterval(updateTimers, 1000);
-  }, []);
+  };
 
   const output = (data) => {
     // car has been added
+    window.location.reload();
     console.log(data);
   };
 
@@ -77,7 +82,7 @@ const List = () => {
               <Card
                 key={car.id}
                 sx={{
-                  width: "auto",
+                  width: "19vw",
                   margin: 1,
                   justifyContent: "space-between",
                 }}
@@ -87,7 +92,7 @@ const List = () => {
                   <CardMedia
                     sx={{ height: 200 }}
                     image={
-                      car.pictures[0]?.file ??
+                      car?.pictures?.[0]?.file ??
                       "https://static.vecteezy.com/system/resources/previews/007/626/807/original/toy-car-for-2d-cartoon-animation-city-cars-and-vehicles-transport-free-vector.jpg"
                     }
                     title={car.brand}

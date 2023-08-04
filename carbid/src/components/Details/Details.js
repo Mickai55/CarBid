@@ -5,19 +5,31 @@ import "./Details.css";
 import { MdTimer } from "react-icons/md";
 import { formatTime } from "Helpers";
 import Button from "@mui/material/Button";
-import { getCar } from "Service";
-import { useParams } from "react-router-dom";
+import { deleteCar, getCar } from "Service";
+import { useNavigate, useParams } from "react-router-dom";
+import CarAddDialog from "../List/CarAddDialog";
 
 const Details = (props) => {
   const routeParams = useParams();
+  const [openDialog, setOpenDialog] = useState(false);
   const [timer, setTimer] = useState("");
   const [car, setCar] = useState(null);
   const carRef = useRef(null);
+  const navigate = useNavigate();
 
   const updateTimer = () => {
     if (carRef.current) {
       setTimer(formatTime(carRef.current.biddingInfo.sellingTime));
     }
+  };
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const output = (data) => {
+    // car has been edited
+    console.log(data);
   };
 
   useEffect(() => {
@@ -29,14 +41,46 @@ const Details = (props) => {
     setInterval(updateTimer, 1000);
   }, [routeParams]);
 
+  function handleDeleteCar() {
+    if (window.confirm("Are you sure?")) {
+      deleteCar(car.id).then(() => navigate("/list", { replace: true }));
+    } else {
+    }
+  }
+
   return (
     <>
       {car === null ? (
         <div>Loading...</div>
       ) : (
         <>
-          <h3 className="fw-bold">
-            {car.fabricationYear} {car.brand} {car.model}
+          <h3 className="fw-bold d-flex justify-content-between">
+            <span>
+              {car.fabricationYear} {car.brand} {car.model}
+            </span>
+            <span>
+              <Button
+                onClick={handleClickOpenDialog}
+                variant="contained"
+                component="label"
+              >
+                Edit Car
+              </Button>
+              <CarAddDialog
+                open={openDialog}
+                setOpenDialog={setOpenDialog}
+                car={car}
+                func={output}
+              />
+              <Button
+                onClick={handleDeleteCar}
+                variant="contained"
+                color="warning"
+                component="label"
+              >
+                Delete Car
+              </Button>
+            </span>
           </h3>
           <div className="album mt-2">
             <CarGallery images={car.pictures} />
@@ -116,15 +160,19 @@ class CarGallery extends React.Component {
 
     return (
       <>
-        <ImageGallery
-          items={images.map((image) => ({
-            original: image.file,
-            thumbnail: image.file,
-          }))}
-          thumbnailPosition="right"
-          showBullets={true}
-          showPlayButton={false}
-        />
+        {!images || images.length === 0 ? (
+          <div>Please add photos of the car.</div>
+        ) : (
+          <ImageGallery
+            items={images.map((image) => ({
+              original: image.file,
+              thumbnail: image.file,
+            }))}
+            thumbnailPosition="right"
+            showBullets={true}
+            showPlayButton={false}
+          />
+        )}
       </>
     );
   }

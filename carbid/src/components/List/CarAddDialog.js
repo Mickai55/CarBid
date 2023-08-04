@@ -10,13 +10,12 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import React, { useEffect, useState } from "react";
-import { addCar } from "Service";
+import { addCar, editCar } from "Service";
 import { BsFillTrashFill } from "react-icons/bs";
 import { IconButton } from "@mui/material";
 
 const CarAddDialog = (props) => {
   const handleCloseDialog = () => {
-    //todo are you sure
     props.setOpenDialog(false);
   };
   const popularCarCompanies = [
@@ -33,6 +32,7 @@ const CarAddDialog = (props) => {
   ];
   const currencies = ["$", "€", "RON", "฿"];
 
+  const [isCarEditingMode, setIsCarEditingMode] = useState(false);
   const today = new Date().toISOString().slice(0, 10);
   const [minDate, setMinDate] = useState(today);
   let [uploadedFiles, setUploadedFiles] = useState([]);
@@ -43,22 +43,36 @@ const CarAddDialog = (props) => {
     watch,
     trigger,
     control,
+    setValue,
   } = useForm({
     mode: "onChange",
   });
 
   const onSubmitForm = (car) => {
-    const uid =
-      Math.random().toString().substr(14) + new Date().toISOString().toString();
-    car.id = uid;
-    car.currentPrice = car.startingPrice;
-    car.pictures = uploadedFiles;
-    car.numberOfBids = 0;
-    onSubmitTest(car);
+    if (!isCarEditingMode) {
+      const uid =
+        Math.random().toString().substr(14) +
+        new Date().toISOString().toString();
+      car.id = uid;
+      car.bodyType = "";
+      car.description = "";
+      car.currentPrice = car.startingPrice;
+      car.pictures = uploadedFiles;
+      car.numberOfBids = 0;
+      onSubmit(car);
+    } else {
+      car.id = props.car.id;
+      car.pictures = uploadedFiles;
+      car.numberOfBids = props.car.biddingInfo.numberOfBids;
+      car.currentPrice = props.car.biddingInfo.currentPrice;
+      car.bodyType = "";
+      car.description = "";
+      editCar(car).then();
+    }
   };
 
-  function onSubmitTest(car) {
-    addCar(car);
+  function onSubmit(car) {
+    addCar(car).then();
   }
 
   const handleFileEvent = (e) => {
@@ -83,21 +97,49 @@ const CarAddDialog = (props) => {
 
     Promise.all(uploadFiles)
       .then((uploadedFiles) => {
-        setUploadedFiles((prevUploadedFiles) => [
-          ...prevUploadedFiles,
-          ...uploadedFiles,
-        ]);
+        setUploadedFiles((prevUploadedFiles) => {
+          if (prevUploadedFiles) {
+            return [...prevUploadedFiles, ...uploadedFiles];
+          } else {
+            return uploadedFiles;
+          }
+        });
       })
       .catch((error) => {
         console.error("Error uploading files:", error);
       });
   };
 
-  // useEffect(() => {
-  //   console.log(uploadedFiles);
-  // }, [uploadedFiles]);
+  useEffect(() => {
+    if (!!props.car) {
+      setIsCarEditingMode(true);
+      insertCarValuesInForm();
+    }
+    // console.log(uploadedFiles);
+  }, []);
 
-  function removeCar(name) {
+  const insertCarValuesInForm = () => {
+    if (!props.car) {
+      return;
+    }
+    setValue("brand", props.car.brand);
+    setValue("model", props.car.model);
+    setValue("fabricationYear", props.car.fabricationYear);
+    setValue("fuelType", props.car.fuelType);
+    setValue("transmissionType", props.car.transmissionType);
+    setValue("mileage", props.car.mileage);
+    setValue("power", props.car.power);
+    setValue("engineSize", props.car.engineSize);
+    setValue("numberOfSeats", props.car.numberOfSeats);
+    setValue("color", props.car.color);
+    setValue("startingPrice", props.car.biddingInfo.startingPrice);
+    setValue("currency", props.car.biddingInfo.currency);
+    setValue("listingTime", props.car.biddingInfo.listingTime);
+    setValue("sellingTime", props.car.biddingInfo.sellingTime);
+    setUploadedFiles(props.car.pictures);
+  };
+
+  function removePhoto(name) {
     setUploadedFiles(uploadedFiles.filter((f) => f.name !== name));
   }
 
@@ -115,11 +157,12 @@ const CarAddDialog = (props) => {
           },
         }}
       >
-        <DialogTitle>Bid Car</DialogTitle>
+        <DialogTitle>{isCarEditingMode ? "Edit" : "Bid"} Car</DialogTitle>
         <form onSubmit={handleSubmit(onSubmitForm)}>
           <DialogContent>
             <DialogContentText>
-              Please add the car that you want to bid
+              Please {isCarEditingMode ? "edit" : "add"} the car that you want
+              to bid
             </DialogContentText>
             <Box
               component="div"
@@ -285,6 +328,7 @@ const CarAddDialog = (props) => {
                       {...field}
                       variant="standard"
                       label="Starting Price"
+                      disabled={isCarEditingMode}
                       type="number"
                     />
                   )}
@@ -299,6 +343,7 @@ const CarAddDialog = (props) => {
                       select
                       variant="standard"
                       defaultValue="EUR"
+                      disabled={isCarEditingMode}
                       label="Currency"
                     >
                       {currencies.map((option) => (
@@ -322,6 +367,7 @@ const CarAddDialog = (props) => {
                       variant="standard"
                       label="Listing Time"
                       type="date"
+                      disabled={isCarEditingMode}
                       InputProps={{ inputProps: { min: today } }}
                       onChange={(e) => {
                         setMinDate(e.target.value);
@@ -340,6 +386,7 @@ const CarAddDialog = (props) => {
                       InputLabelProps={{ shrink: true }}
                       variant="standard"
                       label="Selling Time"
+                      disabled={isCarEditingMode}
                       type="date"
                       onChange={(e) => field.onChange(e.target.value)}
                       InputProps={{ inputProps: { min: minDate } }}
@@ -363,7 +410,7 @@ const CarAddDialog = (props) => {
                     <img style={{ height: 100, margin: 10 }} src={file.file} />
                     <div
                       className="text-center"
-                      onClick={() => removeCar(file.name)}
+                      onClick={() => removePhoto(file.name)}
                     >
                       <IconButton
                         style={{ color: "red" }}
