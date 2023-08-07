@@ -67,12 +67,12 @@ const CarAddDialog = (props) => {
       car.currentPrice = props.car.biddingInfo.currentPrice;
       car.bodyType = "";
       car.description = "";
-      editCar(car).then();
+      editCar(car).then(() => window.location.reload());
     }
   };
 
   function onSubmit(car) {
-    addCar(car).then();
+    addCar(car).then(() => window.location.reload());
   }
 
   const handleFileEvent = (e) => {
@@ -399,7 +399,7 @@ const CarAddDialog = (props) => {
               </div>
             </Box>
 
-            <Button className="mt-3" variant="contained" component="label">
+            <Button className="mt-3" component="label">
               Upload Photos
               <input onChange={handleFileEvent} type="file" multiple hidden />
             </Button>
@@ -424,9 +424,14 @@ const CarAddDialog = (props) => {
                 ))}
             </div>
           </DialogContent>
-          <DialogActions>
+          <DialogActions style={{ padding: 20 }}>
             <Button onClick={handleCloseDialog}>Cancel</Button>
-            <Button onClick={handleCloseDialog} type="submit" name="Submit">
+            <Button
+              variant="contained"
+              onClick={handleCloseDialog}
+              type="submit"
+              name="Submit"
+            >
               Submit
             </Button>
           </DialogActions>

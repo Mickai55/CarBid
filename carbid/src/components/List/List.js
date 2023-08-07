@@ -61,7 +61,11 @@ const List = () => {
   return (
     <>
       {cars === null || cars.length === 0 ? (
-        <div>Loading...</div>
+        <div>
+          Loading{Math.random() < 0.5 ? "." : ""}
+          {Math.random() < 0.5 ? "." : ""}
+          {Math.random() < 0.5 ? "." : ""}
+        </div>
       ) : (
         <>
           <div className="d-flex justify-content-between align-items-center">
@@ -114,7 +118,10 @@ const List = () => {
                 </Link>
                 <CardActions className="auction">
                   <div className="row w-100 align-items-center">
-                    <span className="col-4 text-center">
+                    <span
+                      className="col-4 text-center text-nowrap"
+                      style={{ paddingLeft: 20 }}
+                    >
                       <MdTimer />
                       {timers[index]}
                     </span>

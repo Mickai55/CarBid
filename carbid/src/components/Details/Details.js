@@ -60,9 +60,12 @@ const Details = (props) => {
             </span>
             <span>
               <Button
+                style={{
+                  marginRight: 10,
+                  backgroundColor: "#040c34",
+                }}
                 onClick={handleClickOpenDialog}
                 variant="contained"
-                component="label"
               >
                 Edit Car
               </Button>
@@ -75,7 +78,7 @@ const Details = (props) => {
               <Button
                 onClick={handleDeleteCar}
                 variant="contained"
-                color="warning"
+                style={{ backgroundColor: "red" }}
                 component="label"
               >
                 Delete Car
