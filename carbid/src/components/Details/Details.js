@@ -1,13 +1,13 @@
 // @ts-nocheck
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from "react";
 import ImageGallery from "react-image-gallery";
 import "./Details.css";
-import { MdTimer } from "react-icons/md";
-import { formatTime } from "Helpers";
+import {MdTimer} from "react-icons/md";
+import {formatTime} from "Helpers";
 import Button from "@mui/material/Button";
-import { deleteCar, getCar } from "Service";
-import { useNavigate, useParams } from "react-router-dom";
-import CarAddDialog from "../List/CarAddDialog";
+import {deleteCar, getCar} from "Service";
+import {useNavigate, useParams} from "react-router-dom";
+import CarAddDialog from "../List/CarAddDialog/CarAddDialog";
 
 const Details = (props) => {
   const routeParams = useParams();
@@ -27,23 +27,26 @@ const Details = (props) => {
     setOpenDialog(true);
   };
 
-  const output = (data) => {
-    // car has been edited
-    console.log(data);
+  const carWasEditedEvent = () => {
+    fetchCar();
   };
 
   useEffect(() => {
+    fetchCar();
+    setInterval(updateTimer, 1000);
+  }, [routeParams]);
+
+  const fetchCar = () => {
     getCar(routeParams.id).then((r) => {
       setCar(r);
       carRef.current = r;
       updateTimer();
     });
-    setInterval(updateTimer, 1000);
-  }, [routeParams]);
+  }
 
   function handleDeleteCar() {
     if (window.confirm("Are you sure?")) {
-      deleteCar(car.id).then(() => navigate("/list", { replace: true }));
+      deleteCar(car.id).then(() => navigate("/list", {replace: true}));
     } else {
     }
   }
@@ -73,12 +76,12 @@ const Details = (props) => {
                 open={openDialog}
                 setOpenDialog={setOpenDialog}
                 car={car}
-                func={output}
+                carWasEditedEvent={carWasEditedEvent}
               />
               <Button
                 onClick={handleDeleteCar}
                 variant="contained"
-                style={{ backgroundColor: "red" }}
+                style={{backgroundColor: "red"}}
                 component="label"
               >
                 Delete Car
@@ -86,14 +89,14 @@ const Details = (props) => {
             </span>
           </h3>
           <div className="album mt-2">
-            <CarGallery images={car.pictures} />
+            <CarGallery images={car.pictures}/>
           </div>
 
           <div className="auction-bidbar mt-4">
             <span className="col-4 ml-4">
               <div className="d-flex  justify-content-around">
                 <span>
-                  <MdTimer />
+                  <MdTimer/>
                   {timer}
                 </span>
                 <span>${car.biddingInfo.currentPrice}</span>
@@ -103,7 +106,7 @@ const Details = (props) => {
             <span className="col-4 text-center"></span>
             <span
               className="col-4"
-              style={{ textAlign: "right", paddingRight: "30px" }}
+              style={{textAlign: "right", paddingRight: "30px"}}
             >
               <div>
                 <input
@@ -119,36 +122,36 @@ const Details = (props) => {
           <h3 className="mt-4">Vehicle Details</h3>
           <table className="my-3">
             <tbody>
-              <tr>
-                <td>Brand</td>
-                <td>{car.brand}</td>
-                <td>Model</td>
-                <td>{car.model}</td>
-              </tr>
-              <tr>
-                <td>Fabrication Year</td>
-                <td>{car.fabricationYear}</td>
-                <td>Fuel Type</td>
-                <td>{car.fuelType}</td>
-              </tr>
-              <tr>
-                <td>Transmission</td>
-                <td>{car.transmissionType}</td>
-                <td>Mileage</td>
-                <td>{car.mileage}</td>
-              </tr>
-              <tr>
-                <td>Power</td>
-                <td>{car.power}</td>
-                <td>Engine Size</td>
-                <td>{car.engineSize}</td>
-              </tr>
-              <tr>
-                <td>Number Of Seats</td>
-                <td>{car.numberOfSeats}</td>
-                <td>Color</td>
-                <td>{car.color}</td>
-              </tr>
+            <tr>
+              <td>Brand</td>
+              <td>{car.brand}</td>
+              <td>Model</td>
+              <td>{car.model}</td>
+            </tr>
+            <tr>
+              <td>Fabrication Year</td>
+              <td>{car.fabricationYear}</td>
+              <td>Fuel Type</td>
+              <td>{car.fuelType}</td>
+            </tr>
+            <tr>
+              <td>Transmission</td>
+              <td>{car.transmissionType}</td>
+              <td>Mileage</td>
+              <td>{car.mileage}</td>
+            </tr>
+            <tr>
+              <td>Power</td>
+              <td>{car.power}</td>
+              <td>Engine Size</td>
+              <td>{car.engineSize}</td>
+            </tr>
+            <tr>
+              <td>Number Of Seats</td>
+              <td>{car.numberOfSeats}</td>
+              <td>Color</td>
+              <td>{car.color}</td>
+            </tr>
             </tbody>
           </table>
         </>
@@ -159,7 +162,7 @@ const Details = (props) => {
 
 class CarGallery extends React.Component {
   render() {
-    const { images } = this.props;
+    const {images} = this.props;
 
     return (
       <>

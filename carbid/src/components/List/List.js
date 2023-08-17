@@ -1,16 +1,17 @@
 import "./List.css";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { CardActions } from "@mui/material";
-import { MdTimer } from "react-icons/md";
-import CarAddDialog from "./CarAddDialog";
-import { Link } from "react-router-dom";
-import { formatTime } from "Helpers";
-import { getCars } from "Service";
+import {CardActions} from "@mui/material";
+import {MdTimer} from "react-icons/md";
+import CarAddDialog from "./CarAddDialog/CarAddDialog";
+import {Link} from "react-router-dom";
+import {formatTime} from "Helpers";
+import {getCars} from "Service";
+import Filter from "./Filter/Filter";
 
 const List = () => {
   const tempTimers = [];
@@ -52,10 +53,8 @@ const List = () => {
     });
   };
 
-  const output = (data) => {
-    // car has been added
-    window.location.reload();
-    console.log(data);
+  const carWasAddedEvent = (data) => {
+    fetchCars();
   };
 
   return (
@@ -77,10 +76,10 @@ const List = () => {
             <CarAddDialog
               open={openDialog}
               setOpenDialog={setOpenDialog}
-              func={output}
+              carWasAddedEvent={carWasAddedEvent}
             />
           </div>
-          <div className="filters mx-2 my-3"> Filters</div>
+          <Filter/>
           <div className="grid-container" data-testid="List">
             {cars.map((car, index) => (
               <Card
@@ -94,7 +93,7 @@ const List = () => {
               >
                 <Link to={`/details/${car.id}`} className="link">
                   <CardMedia
-                    sx={{ height: 200 }}
+                    sx={{height: 200}}
                     image={
                       car?.pictures?.[0]?.file ??
                       "https://static.vecteezy.com/system/resources/previews/007/626/807/original/toy-car-for-2d-cartoon-animation-city-cars-and-vehicles-transport-free-vector.jpg"
@@ -120,15 +119,15 @@ const List = () => {
                   <div className="row w-100 align-items-center">
                     <span
                       className="col-4 text-center text-nowrap"
-                      style={{ paddingLeft: 20 }}
+                      style={{paddingLeft: 20}}
                     >
-                      <MdTimer />
+                      <MdTimer/>
                       {timers[index]}
                     </span>
                     <span className="col-4 text-center">
                       {car.biddingInfo.currentPrice}$
                     </span>
-                    <span className="col-4" style={{ textAlign: "right" }}>
+                    <span className="col-4" style={{textAlign: "right"}}>
                       <Button variant="outlined">Bid</Button>
                     </span>
                   </div>
