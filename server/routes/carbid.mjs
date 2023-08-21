@@ -6,7 +6,6 @@ const router = express.Router();
 // This section will help you get a list of all the cars.
 router.get("/", async (req, res) => {
   let collection = await db.collection("cars");
-  console.log(collection);
   let results = await collection.find({}).toArray();
   res.send(results).status(200);
 });
@@ -40,6 +39,28 @@ router.post("/", async (req, res) => {
   let collection = await db.collection("cars");
   let result = await collection.insertOne(newDocument);
   res.send(result).status(204);
+});
+
+// This section will help you get a list of all the available filters. 
+router.get("/filters", async (req, res) => {
+  let collection = await db.collection("cars");
+  let results = await collection.find({}).toArray();
+
+  let availableYears = results.map(x => x.fabricationYear);
+  availableYears = [...new Set(availableYears)];
+
+  let availableBrands = results.map(x => x.brand);
+  availableBrands = [...new Set(availableBrands)];
+
+  let availableTransmissions = results.map(x => x.transmissionType);
+  availableTransmissions = [...new Set(availableTransmissions)];
+
+  let availableEngineSizes = results.map(x => x.engineSize);
+  availableEngineSizes = [...new Set(availableEngineSizes)];
+
+  const resp = ({availableYears, availableBrands, availableTransmissions, availableEngineSizes})
+
+  res.send(resp).status(200);
 });
 
 // This section will help you get a single car by id

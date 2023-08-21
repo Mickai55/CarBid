@@ -10,7 +10,7 @@ import {MdTimer} from "react-icons/md";
 import CarAddDialog from "./CarAddDialog/CarAddDialog";
 import {Link} from "react-router-dom";
 import {formatTime} from "Helpers";
-import {getCars} from "Service";
+import {getCars, getFilters} from "Service";
 import Filter from "./Filter/Filter";
 
 const List = () => {
@@ -41,7 +41,7 @@ const List = () => {
   }, []);
 
   const fetchCars = () => {
-    return getCars().then((cars) => {
+    return getCars().then(cars => {
       if (!cars) {
         return;
       }
@@ -54,7 +54,7 @@ const List = () => {
   };
 
   const carWasAddedEvent = (data) => {
-    fetchCars();
+    fetchCars().then();
   };
 
   return (

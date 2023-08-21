@@ -98,4 +98,25 @@ const deleteCar = async (id) => {
   }
 };
 
-export { getCars, addCar, getCar, editCar, deleteCar };
+const getFilters = async (id) => {
+  try {
+    const response = await fetch(`${baseUrl}/cars/filters`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    window.alert(error);
+    return null;
+  }
+};
+
+export {getCars, addCar, getCar, editCar, deleteCar, getFilters};
