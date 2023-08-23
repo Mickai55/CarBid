@@ -1,8 +1,17 @@
 const baseUrl = "http://localhost:5050";
 
-const getCars = async () => {
+const getCars = async (searchParams) => {
   try {
-    const response = await fetch(`${baseUrl}/cars`, {
+    const queryString = Object.keys(searchParams)
+      .map(
+        (key) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(searchParams[key])}`,
+      )
+      .join("&");
+
+    const url = `${baseUrl}/cars?${queryString}`;
+
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -100,7 +109,7 @@ const deleteCar = async (id) => {
 
 const getFilters = async (id) => {
   try {
-    const response = await fetch(`${baseUrl}/cars/filters`, {
+    const response = await fetch(`${baseUrl}/cars/filters/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -119,4 +128,4 @@ const getFilters = async (id) => {
   }
 };
 
-export {getCars, addCar, getCar, editCar, deleteCar, getFilters};
+export { getCars, addCar, getCar, editCar, deleteCar, getFilters };

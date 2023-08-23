@@ -103,7 +103,6 @@ const CarAddDialog = (props) => {
       setIsCarEditingMode(true);
       insertCarValuesInForm();
     }
-    // console.log(uploadedFiles);
   }, []);
 
   const insertCarValuesInForm = () => {

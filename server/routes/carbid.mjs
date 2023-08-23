@@ -6,8 +6,27 @@ const router = express.Router();
 // This section will help you get a list of all the cars.
 router.get("/", async (req, res) => {
   let collection = await db.collection("cars");
-  let results = await collection.find({}).toArray();
-  res.send(results).status(200);
+  let cars = await collection.find({}).toArray();
+  if (req.query.years && req.query.years != '') {
+    const requestedYears = req.query.years.split(',');
+    cars = cars.filter(car => requestedYears.includes(car.fabricationYear));
+  }
+  if (req.query.brands && req.query.brands != '') {
+    const requestedBrands = req.query.brands.split(',');
+    cars = cars.filter(car => requestedBrands.includes(car.brand));
+  }
+  if (req.query.transmissions && req.query.transmissions != '') {
+    const requestedTransmissions = req.query.transmissions.split(',');
+    cars = cars.filter(car => requestedTransmissions.includes(car.transmissionType));
+  }
+  if (req.query.engineSize && req.query.engineSize != '') {
+    const requestedEngineSize = req.query.engineSize.split(',');
+    cars = cars.filter(car => requestedEngineSize.includes(car.engineSize));
+  }
+
+  console.log(req.query);
+
+  res.send(cars).status(200);
 });
 
 // This section will help you create a new car.
@@ -42,7 +61,7 @@ router.post("/", async (req, res) => {
 });
 
 // This section will help you get a list of all the available filters. 
-router.get("/filters", async (req, res) => {
+router.get("/filters/all", async (req, res) => {
   let collection = await db.collection("cars");
   let results = await collection.find({}).toArray();
 

@@ -1,22 +1,23 @@
 import "./List.css";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import {CardActions} from "@mui/material";
-import {MdTimer} from "react-icons/md";
+import { CardActions } from "@mui/material";
+import { MdTimer } from "react-icons/md";
 import CarAddDialog from "./CarAddDialog/CarAddDialog";
-import {Link} from "react-router-dom";
-import {formatTime} from "Helpers";
-import {getCars, getFilters} from "Service";
+import { Link, useSearchParams } from "react-router-dom";
+import { formatTime } from "Helpers";
+import { getCars, getFilters } from "Service";
 import Filter from "./Filter/Filter";
 
 const List = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const tempTimers = [];
-  let pageLoading = true;
-  let pageError = false;
+  const [pageLoading, setPageLoading] = useState(true);
+  const [pageError, setPageError] = useState(true);
 
   const [cars, setCars] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -41,7 +42,9 @@ const List = () => {
   }, []);
 
   const fetchCars = () => {
-    return getCars().then(cars => {
+    setPageLoading(true);
+    return getCars(Object.fromEntries([...searchParams])).then((cars) => {
+      setPageLoading(false);
       if (!cars) {
         return;
       }
@@ -53,33 +56,35 @@ const List = () => {
     });
   };
 
-  const carWasAddedEvent = (data) => {
+  const carWasAddedEvent = () => {
     fetchCars().then();
   };
 
   return (
     <>
-      {cars === null || cars.length === 0 ? (
+      <div className="d-flex justify-content-between align-items-center">
+        <div></div>
+        <div className="h3 my-2">Auctions in progress</div>
+        <Button onClick={handleClickOpenDialog} variant="contained">
+          Add Car
+        </Button>
+        <CarAddDialog
+          open={openDialog}
+          setOpenDialog={setOpenDialog}
+          carWasAddedEvent={carWasAddedEvent}
+        />
+      </div>
+      <Filter fetchCars={fetchCars} />
+      {pageLoading ? (
         <div>
           Loading{Math.random() < 0.5 ? "." : ""}
           {Math.random() < 0.5 ? "." : ""}
           {Math.random() < 0.5 ? "." : ""}
         </div>
+      ) : cars.length === 0 ? (
+        <div>No cars found.</div>
       ) : (
         <>
-          <div className="d-flex justify-content-between align-items-center">
-            <div></div>
-            <div className="h3 my-2">Auctions in progress</div>
-            <Button onClick={handleClickOpenDialog} variant="contained">
-              Add Car
-            </Button>
-            <CarAddDialog
-              open={openDialog}
-              setOpenDialog={setOpenDialog}
-              carWasAddedEvent={carWasAddedEvent}
-            />
-          </div>
-          <Filter/>
           <div className="grid-container" data-testid="List">
             {cars.map((car, index) => (
               <Card
@@ -93,7 +98,7 @@ const List = () => {
               >
                 <Link to={`/details/${car.id}`} className="link">
                   <CardMedia
-                    sx={{height: 200}}
+                    sx={{ height: 200 }}
                     image={
                       car?.pictures?.[0]?.file ??
                       "https://static.vecteezy.com/system/resources/previews/007/626/807/original/toy-car-for-2d-cartoon-animation-city-cars-and-vehicles-transport-free-vector.jpg"
@@ -119,15 +124,15 @@ const List = () => {
                   <div className="row w-100 align-items-center">
                     <span
                       className="col-4 text-center text-nowrap"
-                      style={{paddingLeft: 20}}
+                      style={{ paddingLeft: 20 }}
                     >
-                      <MdTimer/>
+                      <MdTimer />
                       {timers[index]}
                     </span>
                     <span className="col-4 text-center">
                       {car.biddingInfo.currentPrice}$
                     </span>
-                    <span className="col-4" style={{textAlign: "right"}}>
+                    <span className="col-4" style={{ textAlign: "right" }}>
                       <Button variant="outlined">Bid</Button>
                     </span>
                   </div>
