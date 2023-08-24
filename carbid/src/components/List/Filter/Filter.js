@@ -15,6 +15,7 @@ const Filter = (props) => {
   const [filterBrand, setFilterBrand] = useState([]);
   const [filterTransmission, setFilterTransmission] = useState([]);
   const [filterEngineSize, setFilterEngineSize] = useState([]);
+  const [sortCriteria, setSortCriteria] = useState("dateOfAddition");
   const [filters, setFilters] = useState({
     availableYears: [],
     availableBrands: [],
@@ -149,12 +150,25 @@ const Filter = (props) => {
     setFilterBrand([]);
     setFilterTransmission([]);
     setFilterEngineSize([]);
+    setSortCriteria("dateOfAddition");
+    props.setPageIndex(1);
   }
 
   const [yearVal, setYearVal] = useState("");
   const [brandVal, setBrandVal] = useState("");
   const [transVal, setTransVal] = useState("");
   const [engineSizeVal, setEngineSizeVal] = useState("");
+
+  function sortBy(criteria) {
+    setSortCriteria(() => {
+      setSearchParams({
+        ...Object.fromEntries([...searchParams]),
+        sort: criteria,
+      });
+      return criteria;
+    });
+  }
+
   return (
     <>
       <div className="filters">
@@ -246,16 +260,40 @@ const Filter = (props) => {
                   ))}
                 </TextField>
               </div>
+              <div className="ms-2">
+                <TextField
+                  select
+                  size="small"
+                  label="Sort By"
+                  defaultValue="dateOfAddition"
+                  style={{ width: 180 }}
+                >
+                  <MenuItem
+                    key={"dateOfAddition"}
+                    value={"dateOfAddition"}
+                    onClick={() => sortBy("dateOfAddition")}
+                  >
+                    Date of Addition
+                  </MenuItem>
+                  <MenuItem
+                    key={"price"}
+                    value={"price"}
+                    onClick={() => sortBy("price")}
+                  >
+                    Price
+                  </MenuItem>
+                </TextField>
+              </div>
+              <Button
+                className="ms-2"
+                onClick={clearAllFilters}
+                variant="contained"
+                style={{ backgroundColor: "red" }}
+                component="label"
+              >
+                Clear All Filters
+              </Button>
             </div>
-
-            <Button
-              onClick={clearAllFilters}
-              variant="contained"
-              style={{ backgroundColor: "red" }}
-              component="label"
-            >
-              Clear All Filters
-            </Button>
           </>
         ) : (
           "Loading..."

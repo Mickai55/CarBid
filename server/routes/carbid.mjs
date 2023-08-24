@@ -3,6 +3,13 @@ import db from "../db/conn.mjs";
 
 const router = express.Router();
 
+router.get("/count", async (req, res) => {
+  let collection = await db.collection("cars");
+  let results = await collection.find({}).toArray();
+
+  res.send({count: results.length}).status(200);
+});
+
 // This section will help you get a list of all the cars.
 router.get("/", async (req, res) => {
   let collection = await db.collection("cars");
@@ -23,8 +30,33 @@ router.get("/", async (req, res) => {
     const requestedEngineSize = req.query.engineSize.split(',');
     cars = cars.filter(car => requestedEngineSize.includes(car.engineSize));
   }
+  if (req.query.sort && req.query.sort != '') {
+    if (req.query.sort === 'dateOfAddition') {
+      cars.sort((a, b) => a.biddingInfo.listingTime > b.biddingInfo.listingTime);
+    } else if (req.query.sort === 'price') {
+      cars.sort((a, b) => parseInt(a.biddingInfo.currentPrice) - parseInt(b.biddingInfo.currentPrice));
+    }
+  }
 
   console.log(req.query);
+
+  const perPageDefault = 9;
+  const pageDefault = 1;
+  let page = req.query.page;
+  let perPage = req.query.perPage;
+
+  console.log(page, perPage);
+
+  if (!perPage || perPage === '') {
+    perPage = perPageDefault;
+  }
+  if (!page || page === '') {
+    page = pageDefault;
+  }
+
+  cars = cars.slice((page - 1) * perPage, page * perPage)
+
+  console.log(cars);
 
   res.send(cars).status(200);
 });

@@ -30,6 +30,30 @@ const getCars = async (searchParams) => {
   }
 };
 
+const getCarsCount = async (searchParams) => {
+  try {
+    const url = `${baseUrl}/cars/count`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    window.alert(error);
+    return null;
+  }
+};
+
 const addCar = async (car) => {
   try {
     const response = await fetch(`${baseUrl}/cars`, {
@@ -128,4 +152,12 @@ const getFilters = async (id) => {
   }
 };
 
-export { getCars, addCar, getCar, editCar, deleteCar, getFilters };
+export {
+  getCars,
+  addCar,
+  getCar,
+  editCar,
+  deleteCar,
+  getFilters,
+  getCarsCount,
+};

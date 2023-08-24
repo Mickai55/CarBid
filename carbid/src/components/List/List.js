@@ -5,13 +5,15 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { CardActions } from "@mui/material";
+import { CardActions, Pagination } from "@mui/material";
 import { MdTimer } from "react-icons/md";
 import CarAddDialog from "./CarAddDialog/CarAddDialog";
 import { Link, useSearchParams } from "react-router-dom";
 import { formatTime } from "Helpers";
-import { getCars, getFilters } from "Service";
+import { getCars, getCarsCount, getFilters } from "Service";
 import Filter from "./Filter/Filter";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const List = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,6 +24,10 @@ const List = () => {
   const [cars, setCars] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [timers, setTimers] = useState([]);
+
+  const [itemsPerPage, setItemsPerPage] = useState(9);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [numberOfPages, setNumberOfPages] = useState(0);
 
   const handleClickOpenDialog = () => {
     setOpenDialog(true);
@@ -35,15 +41,27 @@ const List = () => {
     setTimers(formattedTimers);
   };
 
+  function setPageFromUrl() {
+    const page = searchParams.get("page");
+    if (page) {
+      setPageIndex(parseInt(page));
+    }
+    const perPage = searchParams.get("perPage");
+    if (perPage) {
+      setItemsPerPage(parseInt(perPage));
+    }
+  }
+
   useEffect(() => {
     fetchCars().then();
+    setPageFromUrl();
     // every second update timer
     setInterval(updateTimers, 1000);
   }, []);
 
-  const fetchCars = () => {
+  const fetchCars = async () => {
     setPageLoading(true);
-    return getCars(Object.fromEntries([...searchParams])).then((cars) => {
+    await getCars(Object.fromEntries([...searchParams])).then((cars) => {
       setPageLoading(false);
       if (!cars) {
         return;
@@ -54,18 +72,45 @@ const List = () => {
       updateTimers();
       setCars(cars);
     });
+    getCarsCount().then((c) =>
+      setNumberOfPages(Math.ceil(c.count / itemsPerPage)),
+    );
   };
 
   const carWasAddedEvent = () => {
     fetchCars().then();
   };
 
+  const handleChangePagination = (e, p) => {
+    setPageIndex(() => {
+      setSearchParams({
+        ...Object.fromEntries([...searchParams]),
+        page: p.toString(),
+      });
+      return p;
+    });
+  };
+
+  function changeItemsPerPage(p) {
+    setItemsPerPage(() => {
+      setSearchParams({
+        ...Object.fromEntries([...searchParams]),
+        perPage: p.toString(),
+      });
+      return p;
+    });
+  }
+
   return (
     <>
       <div className="d-flex justify-content-between align-items-center">
         <div></div>
         <div className="h3 my-2">Auctions in progress</div>
-        <Button onClick={handleClickOpenDialog} variant="contained">
+        <Button
+          onClick={handleClickOpenDialog}
+          variant="contained"
+          className="me-3"
+        >
           Add Car
         </Button>
         <CarAddDialog
@@ -74,7 +119,7 @@ const List = () => {
           carWasAddedEvent={carWasAddedEvent}
         />
       </div>
-      <Filter fetchCars={fetchCars} />
+      <Filter fetchCars={fetchCars} setPageIndex={setPageIndex} />
       {pageLoading ? (
         <div>
           Loading{Math.random() < 0.5 ? "." : ""}
@@ -142,12 +187,48 @@ const List = () => {
           </div>
         </>
       )}
+      <div className="d-flex">
+        <Pagination
+          className="mt-3"
+          variant="outlined"
+          shape="rounded"
+          count={numberOfPages}
+          page={pageIndex ?? 1}
+          showFirstButton
+          showLastButton
+          onChange={handleChangePagination}
+        />
+        <TextField
+          select
+          size="small"
+          label="Items per Page"
+          defaultValue="9"
+          style={{ width: 100, marginTop: 9 }}
+        >
+          <MenuItem key={"3"} value={"3"} onClick={() => changeItemsPerPage(3)}>
+            3
+          </MenuItem>
+          <MenuItem key={"9"} value={"9"} onClick={() => changeItemsPerPage(9)}>
+            9
+          </MenuItem>
+          <MenuItem
+            key={"18"}
+            value={"18"}
+            onClick={() => changeItemsPerPage(18)}
+          >
+            18
+          </MenuItem>
+          <MenuItem
+            key={"27"}
+            value={"27"}
+            onClick={() => changeItemsPerPage(27)}
+          >
+            27
+          </MenuItem>
+        </TextField>
+      </div>
     </>
   );
 };
-
-List.propTypes = {};
-
-List.defaultProps = {};
 
 export default List;
