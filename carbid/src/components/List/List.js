@@ -5,7 +5,7 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { CardActions, Pagination } from "@mui/material";
+import { CardActions, LinearProgress, Pagination } from "@mui/material";
 import { MdTimer } from "react-icons/md";
 import CarAddDialog from "./CarAddDialog/CarAddDialog";
 import { Link, useSearchParams } from "react-router-dom";
@@ -14,6 +14,7 @@ import { getCars, getCarsCount, getFilters } from "Service";
 import Filter from "./Filter/Filter";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
+import ImageGallery from "react-image-gallery";
 
 const List = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -122,9 +123,7 @@ const List = () => {
       <Filter fetchCars={fetchCars} setPageIndex={setPageIndex} />
       {pageLoading ? (
         <div>
-          Loading{Math.random() < 0.5 ? "." : ""}
-          {Math.random() < 0.5 ? "." : ""}
-          {Math.random() < 0.5 ? "." : ""}
+          <LinearProgress className="mb-3" />
         </div>
       ) : cars.length === 0 ? (
         <div>No cars found.</div>
@@ -141,16 +140,11 @@ const List = () => {
                 }}
                 className="card"
               >
-                <Link to={`/details/${car.id}`} className="link">
-                  <CardMedia
-                    sx={{ height: 200 }}
-                    image={
-                      car?.pictures?.[0]?.file ??
-                      "https://static.vecteezy.com/system/resources/previews/007/626/807/original/toy-car-for-2d-cartoon-animation-city-cars-and-vehicles-transport-free-vector.jpg"
-                    }
-                    title={car.brand}
-                  />
-                  <CardContent>
+                <CardMedia>
+                  <CarGallery images={car.pictures} />
+                </CardMedia>
+                <CardContent>
+                  <Link to={`/details/${car.id}`} className="link">
                     <Typography
                       className="fw-bold"
                       gutterBottom
@@ -163,8 +157,8 @@ const List = () => {
                       {car.transmissionType}, {car.power}, {car.numberOfSeats}{" "}
                       seats, {car.color}
                     </Typography>
-                  </CardContent>
-                </Link>
+                  </Link>
+                </CardContent>
                 <CardActions className="auction">
                   <div className="row w-100 align-items-center">
                     <span
@@ -230,5 +224,28 @@ const List = () => {
     </>
   );
 };
+
+class CarGallery extends React.Component {
+  render() {
+    const { images } = this.props;
+
+    return (
+      <>
+        {!images || images.length === 0 ? (
+          <img alt="" src={require("./default-car.jpg")} height="220" />
+        ) : (
+          <ImageGallery
+            items={images.map((image) => ({
+              original: image.file,
+            }))}
+            showBullets={true}
+            showPlayButton={false}
+            showFullscreenButton={false}
+          />
+        )}
+      </>
+    );
+  }
+}
 
 export default List;

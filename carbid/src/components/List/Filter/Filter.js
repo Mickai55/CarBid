@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getFilters } from "../../../Service";
-import { Chip } from "@mui/material";
+import { Chip, LinearProgress } from "@mui/material";
 import Button from "@mui/material/Button";
 
 const Filter = (props) => {
@@ -184,7 +184,7 @@ const Filter = (props) => {
                   defaultValue=""
                   value={yearVal}
                   onChange={() => setYearVal("")}
-                  style={{ width: 180 }}
+                  style={{ width: "8vw" }}
                 >
                   {filters.availableYears.map((x) => (
                     <MenuItem
@@ -205,7 +205,7 @@ const Filter = (props) => {
                   defaultValue=""
                   value={brandVal}
                   onChange={() => setBrandVal("")}
-                  style={{ width: 180 }}
+                  style={{ width: "8vw" }}
                 >
                   {filters.availableBrands.map((x) => (
                     <MenuItem
@@ -226,7 +226,7 @@ const Filter = (props) => {
                   defaultValue=""
                   value={transVal}
                   onChange={() => setTransVal("")}
-                  style={{ width: 180 }}
+                  style={{ width: "8vw" }}
                 >
                   {filters.availableTransmissions.map((x) => (
                     <MenuItem
@@ -247,7 +247,7 @@ const Filter = (props) => {
                   defaultValue=""
                   value={engineSizeVal}
                   onChange={() => setEngineSizeVal("")}
-                  style={{ width: 180 }}
+                  style={{ width: "8vw" }}
                 >
                   {filters.availableEngineSizes.map((x) => (
                     <MenuItem
@@ -266,7 +266,7 @@ const Filter = (props) => {
                   size="small"
                   label="Sort By"
                   defaultValue="dateOfAddition"
-                  style={{ width: 180 }}
+                  style={{ width: "8vw" }}
                 >
                   <MenuItem
                     key={"dateOfAddition"}
@@ -296,7 +296,7 @@ const Filter = (props) => {
             </div>
           </>
         ) : (
-          "Loading..."
+          <LinearProgress />
         )}
       </div>
       {filterYear.length +

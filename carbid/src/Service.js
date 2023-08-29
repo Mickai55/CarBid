@@ -46,7 +46,6 @@ const getCarsCount = async (searchParams) => {
     }
 
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     window.alert(error);

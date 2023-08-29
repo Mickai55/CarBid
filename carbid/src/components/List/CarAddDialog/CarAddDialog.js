@@ -307,7 +307,7 @@ const CarAddDialog = (props) => {
                   defaultValue=""
                 />
               </div>
-              <div className="fw-bold mt-3 ml-3">Bidding Info</div>
+              <div className="fw-bold mt-3 ms-3">Bidding Info</div>
               <div>
                 <Controller
                   render={({ field }) => (

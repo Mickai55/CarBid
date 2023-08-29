@@ -1,7 +1,7 @@
 :root {
   --pagePadding: 20%;
   --themeColor: #1b1f31;
-  --themeGradient: linear-gradient(-10deg, #000000 0%, #101836 50%, #040c34 75%);
+  --themeGradient: linear-gradient(-10deg, #000000 0%, #002f6a 50%, #0d174e 100%);
 }
 
 .App {
