@@ -11,7 +11,6 @@ try {
   console.error(e);
 }
 
-// let db = conn.db("sample_training");
-let db = conn.db("carbid");
+let db = conn.db("carbid"); 
 
 export default db;

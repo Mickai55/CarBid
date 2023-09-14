@@ -38,14 +38,10 @@ router.get("/", async (req, res) => {
     }
   }
 
-  console.log(req.query);
-
   const perPageDefault = 9;
   const pageDefault = 1;
   let page = req.query.page;
   let perPage = req.query.perPage;
-
-  console.log(page, perPage);
 
   if (!perPage || perPage === '') {
     perPage = perPageDefault;
@@ -56,7 +52,7 @@ router.get("/", async (req, res) => {
 
   cars = cars.slice((page - 1) * perPage, page * perPage)
 
-  console.log(cars);
+  console.log("merge");
 
   res.send(cars).status(200);
 });
@@ -116,7 +112,6 @@ router.get("/filters/all", async (req, res) => {
 
 // This section will help you get a single car by id
 router.get("/:id", async (req, res) => {
-  console.log(req.params);
   let collection = await db.collection("cars");
   let query = {id: req.params.id};
   let result = await collection.findOne(query);
