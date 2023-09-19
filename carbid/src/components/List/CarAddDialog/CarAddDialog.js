@@ -10,7 +10,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import React, { useEffect, useState } from "react";
-import { addCar, editCar } from "Service";
+import { addCar, editCar } from "ServiceCars";
 import { BsFillTrashFill } from "react-icons/bs";
 import { IconButton } from "@mui/material";
 import { currencies, popularCarCompanies } from "../../../Helpers";

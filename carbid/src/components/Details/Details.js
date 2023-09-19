@@ -5,7 +5,7 @@ import "./Details.css";
 import { MdTimer } from "react-icons/md";
 import { formatTime } from "Helpers";
 import Button from "@mui/material/Button";
-import { deleteCar, getCar } from "Service";
+import { deleteCar, getCar } from "ServiceCars";
 import { useNavigate, useParams } from "react-router-dom";
 import CarAddDialog from "../List/CarAddDialog/CarAddDialog";
 import { LinearProgress } from "@mui/material";

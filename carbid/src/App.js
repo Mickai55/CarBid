@@ -8,6 +8,7 @@ import History from 'components/History/History';
 import Login from 'components/Login/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Details from "components/Details/Details";
+import Register from "components/Register/Register";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/list" element={<List/>}/>
             <Route path="/history" element={<History/>}/>
             <Route path="/login" element={<Login/>}/>
+            <Route path="/register" element={<Register/>}/>
             <Route path="/details/:id" element={<Details/>}/>
           </Routes>
         </div>

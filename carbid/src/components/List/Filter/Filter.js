@@ -4,7 +4,7 @@ import { popularCarCompanies } from "../../../Helpers";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { getFilters } from "../../../Service";
+import { getFilters } from "../../../ServiceCars";
 import { Chip, LinearProgress } from "@mui/material";
 import Button from "@mui/material/Button";
 
