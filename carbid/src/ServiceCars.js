@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:5050";
+const baseUrl = "http://localhost:5050/cars";
 
 const getCars = async (searchParams) => {
   try {
@@ -9,7 +9,7 @@ const getCars = async (searchParams) => {
       )
       .join("&");
 
-    const url = `${baseUrl}/cars?${queryString}`;
+    const url = `${baseUrl}?${queryString}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -32,7 +32,7 @@ const getCars = async (searchParams) => {
 
 const getCarsCount = async (searchParams) => {
   try {
-    const url = `${baseUrl}/cars/count`;
+    const url = `${baseUrl}/count`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -55,7 +55,7 @@ const getCarsCount = async (searchParams) => {
 
 const addCar = async (car) => {
   try {
-    const response = await fetch(`${baseUrl}/cars`, {
+    const response = await fetch(`${baseUrl}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -74,7 +74,7 @@ const addCar = async (car) => {
 
 const getCar = async (id) => {
   try {
-    const response = await fetch(`${baseUrl}/cars/${id}`, {
+    const response = await fetch(`${baseUrl}/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -95,7 +95,7 @@ const getCar = async (id) => {
 
 const editCar = async (car) => {
   try {
-    const response = await fetch(`${baseUrl}/cars/${car.id}`, {
+    const response = await fetch(`${baseUrl}/${car.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -114,7 +114,7 @@ const editCar = async (car) => {
 
 const deleteCar = async (id) => {
   try {
-    const response = await fetch(`${baseUrl}/cars/${id}`, {
+    const response = await fetch(`${baseUrl}/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -132,7 +132,7 @@ const deleteCar = async (id) => {
 
 const getFilters = async (id) => {
   try {
-    const response = await fetch(`${baseUrl}/cars/filters/all`, {
+    const response = await fetch(`${baseUrl}/filters/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

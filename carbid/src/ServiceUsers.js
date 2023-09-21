@@ -1,6 +1,31 @@
-const baseUrl = "http://localhost:5050";
+const baseUrl = "http://localhost:5050/auth";
 
-export const login = async (username, password) => {
+export const apiRegister = async (username, password) => {
+  try {
+    const url = `${baseUrl}/register`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  } catch (error) {
+    window.alert(error);
+    return null;
+  }
+}
+
+export const apiLogin = async (username, password) => {
   try {
     const url = `${baseUrl}/login`;
 
@@ -12,11 +37,12 @@ export const login = async (username, password) => {
       body: JSON.stringify({ username, password })
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      throw new Error("Failed to fetch data");
+      throw new Error(data.message);
     }
 
-    const data = await response.json();
     return data;
   } catch (error) {
     window.alert(error);
