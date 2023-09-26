@@ -15,10 +15,10 @@ const Register = () => {
     <>
       <div className="text-center">
         <div className="h3 my-4">Register</div>
-        <div className="mb-4">
+        <div className="mb-2">
           <TextField label="Username" variant="standard" onChange={(event) => setUsername(event.target.value)} />
         </div>
-        <div className="mb-4">
+        <div className="mb-2">
           <TextField type='password' label="Password" variant="standard" onChange={(event) => setPassword(event.target.value)} />
         </div>
         <div className="mb-4">

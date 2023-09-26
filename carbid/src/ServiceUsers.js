@@ -9,7 +9,7 @@ export const apiRegister = async (username, password) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ username, password }),
     });
 
     const data = await response.json();
@@ -23,7 +23,7 @@ export const apiRegister = async (username, password) => {
     window.alert(error);
     return null;
   }
-}
+};
 
 export const apiLogin = async (username, password) => {
   try {
@@ -34,7 +34,7 @@ export const apiLogin = async (username, password) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ username, password }),
     });
 
     const data = await response.json();
@@ -43,9 +43,40 @@ export const apiLogin = async (username, password) => {
       throw new Error(data.message);
     }
 
+    localStorage.setItem("username", data.username);
+    console.log(localStorage.getItem("username"));
+    console.log(response);
+
     return data;
   } catch (error) {
     window.alert(error);
     return null;
   }
-}
+};
+
+export const getUsers = async () => {
+  try {
+    const url = `${baseUrl}/users`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer"
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    window.alert(error);
+    return null;
+  }
+};

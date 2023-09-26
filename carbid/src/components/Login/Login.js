@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { apiLogin } from "ServiceUsers";
+import { apiLogin, getUsers } from "ServiceUsers";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -14,7 +14,10 @@ const Login = () => {
   return (
     <div className="text-center">
       <div className="h3 my-4">Login</div>
-      <div className="mb-4">
+        <Button onClick={() => {getUsers()}} variant="contained" className="">
+          buton
+        </Button>
+      <div className="mb-2">
           <TextField label="Username" variant="standard" onChange={(event) => setUsername(event.target.value)} />
       </div>
       <div className="mb-4">

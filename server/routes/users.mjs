@@ -7,9 +7,50 @@ import jwt from "jsonwebtoken";
 const router = express.Router();
 const jwtSecret = process.env.SECRET_KEY;
 
+const adminAuth = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    jwt.verify(token, jwtSecret, (err, decodedToken) => {
+      if (err) {
+        return res.status(401).json({ message: "Not authorized" });
+      } else {
+        if (decodedToken.role !== "Basic") {
+          return res.status(401).json({ message: "Not authorized" });
+        } else {
+          next();
+        }
+      }
+    });
+  } else {
+    return res
+      .status(401)
+      .json({ message: "Not authorized, token not available" });
+  }
+};
+
+const userAuth = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    jwt.verify(token, jwtSecret, (err, decodedToken) => {
+      if (err) {
+        return res.status(401).json({ message: "Not authorized" });
+      } else {
+        if (decodedToken.role !== "Admin") {
+          return res.status(401).json({ message: "Not authorized" });
+        } else {
+          next();
+        }
+      }
+    });
+  } else {
+    return res
+      .status(401)
+      .json({ message: "Not authorized, token not available" });
+  }
+};
+
 // auth.js
 router.post("/register", async (req, res) => {
-
   const { username, password } = req.body;
   if (password.length < 6) {
     return res.send({ message: "Password less than 6 characters" }).status(400);
@@ -23,7 +64,7 @@ router.post("/register", async (req, res) => {
     let usernameExists = await collection.findOne(query);
     if (usernameExists) {
       return res.status(401).send({
-        message: "Username already exists"
+        message: "Username already exists",
       });
     }
 
@@ -77,7 +118,7 @@ router.post("/login", async (req, res, next) => {
         error: "User not found",
       });
     } else {
-      if (bcrypt.compareSync(req.body.password, user.password)) { 
+      if (bcrypt.compareSync(req.body.password, user.password)) {
         const maxAge = 3 * 60 * 60;
         const token = jwt.sign(
           { id: user._id, username: user.username, role: user.role },
@@ -93,11 +134,12 @@ router.post("/login", async (req, res, next) => {
 
         res.status(200).json({
           message: "Login successful",
-          user,
+          username: user.username,
+          role: user.role,
         });
       } else {
         res.status(400).json({
-          message: "Password is incorrect"
+          message: "Password is incorrect",
         });
       }
     }
@@ -107,6 +149,21 @@ router.post("/login", async (req, res, next) => {
       error: error.message,
     });
   }
+});
+
+router.get("/users", adminAuth, async (req, res, next) => {
+  try {
+    let collection = await db.collection("users");
+    let users = await collection.find({}).toArray();
+    return res
+      .status(201)
+      .json({ message: "Users fetched successfully", users });
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "An error occurred", error: error.message });
+  }
+  res.status(400).json({ message: "An error occurred" });
 });
 
 router.put("/update", adminAuth, async (req, res, next) => {
@@ -164,54 +221,13 @@ router.delete("/delete", adminAuth, async (req, res) => {
   }
 });
 
+router.get("/logout", (req, res) => {
+  res.cookie("jwt", "", { maxAge: "1" });
+  res.status(200).json({ message: "Logout successful" });
+});
+
 router.get("/admin", userAuth, (req, res) => res.send("Admin Route"));
 
 router.get("/basic", adminAuth, (req, res) => res.send("User Route"));
-
-function userAuth() {
-  return (req, res, next) => {
-    const token = req.cookies.jwt;
-    if (token) {
-      jwt.verify(token, jwtSecret, (err, decodedToken) => {
-        if (err) {
-          return res.status(401).json({ message: "Not authorized" });
-        } else {
-          if (decodedToken.role !== "Admin") {
-            return res.status(401).json({ message: "Not authorized" });
-          } else {
-            next();
-          }
-        }
-      });
-    } else {
-      return res
-        .status(401)
-        .json({ message: "Not authorized, token not available" });
-    }
-  };
-}
-
-function adminAuth() {
-  return (req, res, next) => {
-    const token = req.cookies.jwt;
-    if (token) {
-      jwt.verify(token, jwtSecret, (err, decodedToken) => {
-        if (err) {
-          return res.status(401).json({ message: "Not authorized" });
-        } else {
-          if (decodedToken.role !== "Basic") {
-            return res.status(401).json({ message: "Not authorized" });
-          } else {
-            next();
-          }
-        }
-      });
-    } else {
-      return res
-        .status(401)
-        .json({ message: "Not authorized, token not available" });
-    }
-  };
-}
 
 export default router;
