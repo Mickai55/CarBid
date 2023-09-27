@@ -8,14 +8,14 @@ const router = express.Router();
 const jwtSecret = process.env.SECRET_KEY;
 
 const adminAuth = (req, res, next) => {
-  const token = req.cookies.jwt;
+  const token = req.headers.authorization.split(' ')[1];
   if (token) {
     jwt.verify(token, jwtSecret, (err, decodedToken) => {
       if (err) {
-        return res.status(401).json({ message: "Not authorized" });
+        return res.status(401).json({ message: `Not authorized, error: ${err}` });
       } else {
-        if (decodedToken.role !== "Basic") {
-          return res.status(401).json({ message: "Not authorized" });
+        if (decodedToken.role !== "Admin") {
+          return res.status(401).json({ message: "Not authorized, user is not admin" });
         } else {
           next();
         }
@@ -135,7 +135,7 @@ router.post("/login", async (req, res, next) => {
         res.status(200).json({
           message: "Login successful",
           username: user.username,
-          role: user.role,
+          token
         });
       } else {
         res.status(400).json({
@@ -226,8 +226,8 @@ router.get("/logout", (req, res) => {
   res.status(200).json({ message: "Logout successful" });
 });
 
-router.get("/admin", userAuth, (req, res) => res.send("Admin Route"));
+router.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
 
-router.get("/basic", adminAuth, (req, res) => res.send("User Route"));
+router.get("/basic", userAuth, (req, res) => res.send("User Route"));
 
 export default router;

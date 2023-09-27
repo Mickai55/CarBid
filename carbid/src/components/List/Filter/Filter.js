@@ -172,7 +172,7 @@ const Filter = (props) => {
   return (
     <>
       <div className="filters">
-        <div>Filters</div>
+        <div className="fw-bold">Filters</div>
         {filters ? (
           <>
             <div className="d-flex">

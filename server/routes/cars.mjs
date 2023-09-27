@@ -52,8 +52,6 @@ router.get("/", async (req, res) => {
 
   cars = cars.slice((page - 1) * perPage, page * perPage)
 
-  console.log("merge");
-
   res.send(cars).status(200);
 });
 

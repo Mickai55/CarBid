@@ -43,9 +43,35 @@ export const apiLogin = async (username, password) => {
       throw new Error(data.message);
     }
 
-    localStorage.setItem("username", data.username);
-    console.log(localStorage.getItem("username"));
-    console.log(response);
+    localStorage.setItem("user", data.username);
+    localStorage.setItem("token", data.token);
+
+    return data;
+  } catch (error) {
+    window.alert(error);
+    return null;
+  }
+};
+
+export const apiLogout = async () => {
+  try {
+    const url = `${baseUrl}/logout`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
 
     return data;
   } catch (error) {
@@ -62,7 +88,7 @@ export const getUsers = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer"
+        Authorization: `Bearer ${localStorage.token}`
       },
     });
 
