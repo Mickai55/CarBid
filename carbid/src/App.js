@@ -9,14 +9,19 @@ import Login from "components/Login/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Details from "components/Details/Details";
 import Register from "components/Register/Register";
-import { apiLogout } from "ServiceUsers";
+import { apiIsAdmin, apiLogout } from "ServiceUsers";
+import AdminPage from "components/AdminPage/AdminPage";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (localStorage.user) {
       setIsLoggedIn(true);
+      apiIsAdmin().then((response) => {
+        setIsAdmin(response.isAdmin);
+      });
     }
   });
   return (
@@ -41,7 +46,9 @@ function App() {
               </Link>
             ) : (
               <span className="px-2">
-                Hello, <span className="fw-bold">{localStorage.user}</span>
+                <Link to="/admin" className="menu-item">
+                  Hello, <span className="fw-bold">{localStorage.user}</span>
+                </Link>
               </span>
             )}
             {isLoggedIn && (
@@ -65,6 +72,7 @@ function App() {
                 <Login
                   // @ts-ignore
                   setIsLoggedIn={setIsLoggedIn}
+                  setIsAdmin={setIsAdmin}
                 />
               }
             />
@@ -78,6 +86,7 @@ function App() {
               }
             />
             <Route path="/details/:id" element={<Details />} />
+            <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </div>
         <div className="App-footer">

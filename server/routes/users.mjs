@@ -8,14 +8,22 @@ const router = express.Router();
 const jwtSecret = process.env.SECRET_KEY;
 
 const adminAuth = (req, res, next) => {
-  const token = req.headers.authorization.split(' ')[1];
+  const auth = req.headers.authorization;
+  if (!auth) {
+    return res.status(401).json({ message: `Not authenticated.` });
+  }
+  const token = auth.split(" ")[1];
   if (token) {
     jwt.verify(token, jwtSecret, (err, decodedToken) => {
       if (err) {
-        return res.status(401).json({ message: `Not authorized, error: ${err}` });
+        return res
+          .status(401)
+          .json({ message: `Not authorized, error: ${err}` });
       } else {
         if (decodedToken.role !== "Admin") {
-          return res.status(401).json({ message: "Not authorized, user is not admin" });
+          return res
+            .status(401)
+            .json({ message: "Not authorized, user is not admin" });
         } else {
           next();
         }
@@ -49,7 +57,6 @@ const userAuth = (req, res, next) => {
   }
 };
 
-// auth.js
 router.post("/register", async (req, res) => {
   const { username, password } = req.body;
   if (password.length < 6) {
@@ -135,7 +142,7 @@ router.post("/login", async (req, res, next) => {
         res.status(200).json({
           message: "Login successful",
           username: user.username,
-          token
+          token,
         });
       } else {
         res.status(400).json({
@@ -155,9 +162,14 @@ router.get("/users", adminAuth, async (req, res, next) => {
   try {
     let collection = await db.collection("users");
     let users = await collection.find({}).toArray();
-    return res
-      .status(201)
-      .json({ message: "Users fetched successfully", users });
+    return res.status(201).json({
+      message: "Users fetched successfully",
+      users: users.map((u) => ({
+        id: u._id,
+        username: u.username,
+        role: u.role,
+      })),
+    });
   } catch (error) {
     res
       .status(400)
@@ -168,40 +180,31 @@ router.get("/users", adminAuth, async (req, res, next) => {
 
 router.put("/update", adminAuth, async (req, res, next) => {
   const { role, id } = req.body;
-  // First - Verifying if role and id is presnt
+  console.log(role, id);
   if (role && id) {
-    // Second - Verifying if the value of role is admin
-    if (role === "Admin") {
-      // Finds the user with the id
-      let collection = await db.collection("users");
-      let query = {
-        _id: new ObjectId(req.body.id),
-      };
-      let user = collection.findOne(query);
-      user
-        .then(async (user) => {
-          // Third - Verifies the user is not an admin
-          if (user.role !== "Admin") {
-            user.role = role;
-            try {
-              await collection.updateOne(query, { $set: user });
-            } catch (err) {
-              res
-                .status(400)
-                .json({ message: "An error occurred", error: err.message });
-              process.exit(1);
-            }
-            res.status(201).json({ message: "Update successful", user });
-          } else {
-            res.status(400).json({ message: "User is already an Admin" });
-          }
-        })
-        .catch((error) => {
+    let collection = await db.collection("users");
+    let query = {
+      _id: new ObjectId(id),
+    };
+    let user = collection.findOne(query);
+    user
+      .then(async (user) => {
+        user.role = role;
+        try {
+          await collection.updateOne(query, { $set: user });
+        } catch (err) {
           res
             .status(400)
-            .json({ message: "An error occurred", error: error.message });
-        });
-    }
+            .json({ message: "An error occurred", error: err.message });
+          process.exit(1);
+        }
+        res.status(201).json({ message: "Update successful", user });
+      })
+      .catch((error) => {
+        res
+          .status(400)
+          .json({ message: "An error occurred", error: error.message });
+      });
   }
 });
 
@@ -226,7 +229,32 @@ router.get("/logout", (req, res) => {
   res.status(200).json({ message: "Logout successful" });
 });
 
-router.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
+router.get("/admin", (req, res) => {
+  const auth = req.headers.authorization;
+  if (!auth) {
+    return res.status(401).json({ message: `Not authenticated.` });
+  }
+  const token = auth.split(" ")[1];
+  if (token) {
+    jwt.verify(token, jwtSecret, (err, decodedToken) => {
+      if (err) {
+        return res
+          .status(401)
+          .json({ message: `Not authorized, error: ${err}` });
+      } else {
+        if (decodedToken.role !== "Admin") {
+          return res.status(200).json({ isAdmin: false });
+        } else {
+          return res.status(200).json({ isAdmin: true });
+        }
+      }
+    });
+  } else {
+    return res
+      .status(401)
+      .json({ message: "Not authorized, token not available" });
+  }
+});
 
 router.get("/basic", userAuth, (req, res) => res.send("User Route"));
 

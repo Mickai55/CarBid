@@ -48,7 +48,6 @@ const Details = (props) => {
   function handleDeleteCar() {
     if (window.confirm("Are you sure?")) {
       deleteCar(car.id).then(() => navigate("/list", { replace: true }));
-    } else {
     }
   }
 

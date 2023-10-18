@@ -12,7 +12,7 @@ const Register = (props) => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const register = () => {
-    apiRegister(username, password).then(() => navigate('/login', { replace: true })).catch(error => {});
+    apiRegister(username, password).then(() => navigate('/login', { replace: true })).catch(error => {console.log(error);});
   };
   return (
     <>

@@ -80,7 +80,7 @@ export const apiLogout = async () => {
   }
 };
 
-export const getUsers = async () => {
+export const apiGetUsers = async () => {
   try {
     const url = `${baseUrl}/users`;
 
@@ -88,7 +88,7 @@ export const getUsers = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.token}`
+        Authorization: `Bearer ${localStorage.token}`,
       },
     });
 
@@ -98,8 +98,85 @@ export const getUsers = async () => {
       throw new Error(data.message);
     }
 
-    console.log(data);
+    return data;
+  } catch (error) {
+    window.alert(error);
+    return null;
+  }
+};
 
+export const apiIsAdmin = async () => {
+  try {
+    const url = `${baseUrl}/admin`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.token}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+    return data;
+  } catch (error) {
+    window.alert(error);
+    return null;
+  }
+};
+
+export const apiUpdateUserRole = async (id, role) => {
+  try {
+    const url = `${baseUrl}/update`;
+
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.token}`,
+      },
+      body: JSON.stringify({
+        id,
+        role
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+    return data;
+  } catch (error) {
+    window.alert(error);
+    return null;
+  }
+};
+
+export const apiDeleteUser = async (id) => {
+  try {
+    const url = `${baseUrl}/delete`;
+
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.token}`,
+      },
+      body: JSON.stringify({
+        id
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
     return data;
   } catch (error) {
     window.alert(error);
