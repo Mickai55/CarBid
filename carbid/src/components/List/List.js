@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 import "./List.css";
 import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
@@ -16,6 +16,7 @@ import Filter from "./Filter/Filter";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import ImageGallery from "react-image-gallery";
+import BidDialog from "./BidDialog/BidDialog";
 
 const List = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,15 +25,20 @@ const List = () => {
   const [pageError, setPageError] = useState(true);
 
   const [cars, setCars] = useState([]);
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openCarDialog, setOpenCarDialog] = useState(false);
+  const [openBidDialog, setOpenBidDialog] = useState(false);
   const [timers, setTimers] = useState([]);
 
   const [itemsPerPage, setItemsPerPage] = useState(9);
   const [pageIndex, setPageIndex] = useState(1);
   const [numberOfPages, setNumberOfPages] = useState(0);
 
-  const handleClickOpenDialog = () => {
-    setOpenDialog(true);
+  const handleClickOpenCarDialog = () => {
+    setOpenCarDialog(true);
+  };
+
+  const handleClickOpenBidDialog = () => {
+    setOpenBidDialog(true);
   };
 
   const updateTimers = () => {
@@ -75,12 +81,16 @@ const List = () => {
       setCars(cars);
     });
     getCarsCount().then((c) =>
-      setNumberOfPages(Math.ceil(c.count / itemsPerPage)),
+      setNumberOfPages(Math.ceil(c.count / itemsPerPage))
     );
   };
 
   const carWasAddedEvent = () => {
     fetchCars().then();
+  };
+
+  const bidWasAddedEvent = () => {
+    //asdf
   };
 
   const handleChangePagination = (e, p) => {
@@ -109,15 +119,15 @@ const List = () => {
         <div></div>
         <div className="h3 my-2">Auctions in progress</div>
         <Button
-          onClick={handleClickOpenDialog}
+          onClick={handleClickOpenCarDialog}
           variant="contained"
           className="me-3"
         >
           Add Car
         </Button>
         <CarAddDialog
-          open={openDialog}
-          setOpenDialog={setOpenDialog}
+          open={openCarDialog}
+          setOpenCarDialog={setOpenCarDialog}
           carWasAddedEvent={carWasAddedEvent}
         />
       </div>
@@ -173,7 +183,18 @@ const List = () => {
                       {car.biddingInfo.currentPrice}$
                     </span>
                     <span className="col-4" style={{ textAlign: "right" }}>
-                      <Button variant="outlined">Bid</Button>
+                      <Button
+                        variant="outlined"
+                        onClick={handleClickOpenBidDialog}
+                      >
+                        Bid
+                      </Button>
+                      <BidDialog
+                        open={openBidDialog}
+                        setOpenBidDialog={setOpenBidDialog}
+                        bidWasAddedEvent={bidWasAddedEvent}
+                        car={car}
+                      />
                     </span>
                   </div>
                 </CardActions>
@@ -233,6 +254,7 @@ class CarGallery extends React.Component {
     return (
       <>
         {!images || images.length === 0 ? (
+          // @ts-ignore
           <img alt="" src={require("./default-car.jpg")} height="220" />
         ) : (
           <ImageGallery

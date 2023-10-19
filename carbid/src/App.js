@@ -20,7 +20,11 @@ function App() {
     if (localStorage.user) {
       setIsLoggedIn(true);
       apiIsAdmin().then((response) => {
-        setIsAdmin(response.isAdmin);
+        if (response) {
+          setIsAdmin(response.isAdmin);
+        } else {
+          apiLogout().then(() => setIsLoggedIn(false));
+        }
       });
     }
   });
@@ -46,9 +50,15 @@ function App() {
               </Link>
             ) : (
               <span className="px-2">
-                <Link to="/admin" className="menu-item">
-                  Hello, <span className="fw-bold">{localStorage.user}</span>
-                </Link>
+                {isAdmin ? (
+                  <Link to="/admin" className="menu-item">
+                    Hello, <span className="fw-bold">{localStorage.user}</span>
+                  </Link>
+                ) : (
+                  <>
+                    Hello, <span className="fw-bold">{localStorage.user}</span>
+                  </>
+                )}
               </span>
             )}
             {isLoggedIn && (
@@ -93,11 +103,6 @@ function App() {
           <div className="pt-3">
             <span className="mx-3">Regulations</span>
             <span className="mx-3">Terms and Conditions</span>
-            {false && (
-              <span className="mx-3">
-                Logout <LogoutIcon style={{ height: 16 }} />
-              </span>
-            )}
           </div>
         </div>
       </div>

@@ -4,10 +4,12 @@ import { DataGrid } from "@mui/x-data-grid";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { MdDeleteOutline } from "react-icons/md";
-import { IconButton } from "@mui/material";
+import { IconButton, LinearProgress } from "@mui/material";
 
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
+  const [loadingPage, setLoadingPage] = useState(false);
+
   const columns = [
     { field: "username", headerName: "Username", flex: 1 },
     { field: "role", headerName: "Role", flex: 1 },
@@ -58,7 +60,6 @@ const AdminPage = () => {
   ];
 
   const updateUserRole = (id, role) => {
-    console.log(id, role);
     apiUpdateUserRole(id, role).then(() => fetchUsers());
   };
 
@@ -73,26 +74,37 @@ const AdminPage = () => {
   }, []);
 
   const fetchUsers = () => {
-    apiGetUsers().then((resp) => {
-      setUsers(resp.users);
-    });
+    setLoadingPage(true);
+    apiGetUsers()
+      .then((resp) => {
+        setUsers(resp.users);
+      })
+      .then(() => setLoadingPage(false));
   };
 
   return (
     <>
-      <div style={{ height: "100%", width: "100%" }}>
-        <DataGrid
-          rows={users}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
-            },
-          }}
-          pageSizeOptions={[]}
-          hideFooterSelectedRowCount
-        />
-      </div>
+      {loadingPage ? (
+        <div>
+          <LinearProgress className="mb-3" />
+        </div>
+      ) : (
+        <>
+          <div style={{ height: "100%", width: "100%" }}>
+            <DataGrid
+              rows={users}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 10 },
+                },
+              }}
+              pageSizeOptions={[]}
+              hideFooterSelectedRowCount
+            />
+          </div>
+        </>
+      )}
     </>
   );
 };

@@ -14,10 +14,10 @@ import { addCar, editCar } from "ServiceCars";
 import { BsFillTrashFill } from "react-icons/bs";
 import { IconButton } from "@mui/material";
 import { currencies, popularCarCompanies } from "../../../Helpers";
-// TODO fara virgule in form
+// TODO: fara virgule in form
 const CarAddDialog = (props) => {
   const handleCloseDialog = () => {
-    props.setOpenDialog(false);
+    props.setOpenCarDialog(false);
   };
 
   const [isCarEditingMode, setIsCarEditingMode] = useState(false);

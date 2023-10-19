@@ -12,7 +12,7 @@ import { LinearProgress } from "@mui/material";
 
 const Details = (props) => {
   const routeParams = useParams();
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openCarDialog, setOpenCarDialog] = useState(false);
   const [timer, setTimer] = useState("");
   const [car, setCar] = useState(null);
   const carRef = useRef(null);
@@ -24,8 +24,8 @@ const Details = (props) => {
     }
   };
 
-  const handleClickOpenDialog = () => {
-    setOpenDialog(true);
+  const handleClickOpenCarDialog = () => {
+    setOpenCarDialog(true);
   };
 
   const carWasEditedEvent = () => {
@@ -67,14 +67,14 @@ const Details = (props) => {
                   marginRight: 10,
                   backgroundColor: "#040c34",
                 }}
-                onClick={handleClickOpenDialog}
+                onClick={handleClickOpenCarDialog}
                 variant="contained"
               >
                 Edit Car
               </Button>
               <CarAddDialog
-                open={openDialog}
-                setOpenDialog={setOpenDialog}
+                open={openCarDialog}
+                setOpenCarDialog={setOpenCarDialog}
                 car={car}
                 carWasEditedEvent={carWasEditedEvent}
               />
