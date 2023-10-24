@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { apiLogin, apiGetUsers } from "ServiceUsers";
+import { apiLogin } from "ServiceUsers";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -10,9 +10,11 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
 
   const login = () => {
-    apiLogin(username, password).then(() => {
-      props.setIsLoggedIn(true);
-      navigate("/list", { replace: true })
+    apiLogin(username, password).then((ok) => {
+      if (ok) {
+        props.setIsLoggedIn(true);
+        navigate("/list", { replace: true })
+      }
     });
   };
   return (

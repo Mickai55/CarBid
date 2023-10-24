@@ -9,10 +9,13 @@ import { deleteCar, getCar } from "ServiceCars";
 import { useNavigate, useParams } from "react-router-dom";
 import CarAddDialog from "../List/CarAddDialog/CarAddDialog";
 import { LinearProgress } from "@mui/material";
+import BidDialog from "../List/BidDialog/BidDialog";
 
 const Details = (props) => {
   const routeParams = useParams();
   const [openCarDialog, setOpenCarDialog] = useState(false);
+  const [openBidDialog, setOpenBidDialog] = useState(false);
+  const [newPrice, setNewPrice] = useState('');
   const [timer, setTimer] = useState("");
   const [car, setCar] = useState(null);
   const carRef = useRef(null);
@@ -22,6 +25,14 @@ const Details = (props) => {
     if (carRef.current) {
       setTimer(formatTime(carRef.current.biddingInfo.sellingTime));
     }
+  };
+
+  const handleClickOpenBidDialog = () => {
+    setOpenBidDialog(true);
+  };
+
+  const bidWasAddedEvent = () => {
+    //TODO
   };
 
   const handleClickOpenCarDialog = () => {
@@ -39,7 +50,9 @@ const Details = (props) => {
 
   const fetchCar = () => {
     getCar(routeParams.id).then((r) => {
+      console.log(r);
       setCar(r);
+      setNewPrice(r.biddingInfo.currentPrice);
       carRef.current = r;
       updateTimer();
     });
@@ -113,10 +126,21 @@ const Details = (props) => {
                 <input
                   type="number"
                   className="new-price"
-                  defaultValue={car.biddingInfo.currentPrice}
+                  defaultValue={newPrice}
+                  onChange={(e) => setNewPrice(e.target.value) }
                   step={50}
                 ></input>
-                <Button variant="contained">Bid</Button>
+                {/* cannot be lower than current value */}
+                <Button variant="contained" onClick={handleClickOpenBidDialog}>Bid</Button>
+                {openBidDialog && (
+                  <BidDialog
+                    open={openBidDialog}
+                    setOpenBidDialog={setOpenBidDialog}
+                    bidWasAddedEvent={bidWasAddedEvent}
+                    car={car}
+                    newPrice={newPrice}
+                  />
+                )}
               </div>
             </span>
           </div>

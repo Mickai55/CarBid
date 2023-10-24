@@ -1,33 +1,22 @@
-
 import "./List.css";
 import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { CardActions, LinearProgress, Pagination } from "@mui/material";
-import { MdTimer } from "react-icons/md";
+import { LinearProgress, Pagination } from "@mui/material";
 import CarAddDialog from "./CarAddDialog/CarAddDialog";
-import { Link, useSearchParams } from "react-router-dom";
-import { formatTime } from "Helpers";
+import { useSearchParams } from "react-router-dom";
 import { getCars, getCarsCount, getFilters } from "ServiceCars";
 import Filter from "./Filter/Filter";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import ImageGallery from "react-image-gallery";
-import BidDialog from "./BidDialog/BidDialog";
+import Card from "./Card/Card";
 
 const List = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const tempTimers = [];
   const [pageLoading, setPageLoading] = useState(true);
   const [pageError, setPageError] = useState(true);
 
   const [cars, setCars] = useState([]);
   const [openCarDialog, setOpenCarDialog] = useState(false);
-  const [openBidDialog, setOpenBidDialog] = useState(false);
-  const [timers, setTimers] = useState([]);
 
   const [itemsPerPage, setItemsPerPage] = useState(9);
   const [pageIndex, setPageIndex] = useState(1);
@@ -35,18 +24,6 @@ const List = () => {
 
   const handleClickOpenCarDialog = () => {
     setOpenCarDialog(true);
-  };
-
-  const handleClickOpenBidDialog = () => {
-    setOpenBidDialog(true);
-  };
-
-  const updateTimers = () => {
-    const formattedTimers = [];
-    for (let timer of tempTimers) {
-      formattedTimers.push(formatTime(timer));
-    }
-    setTimers(formattedTimers);
   };
 
   function setPageFromUrl() {
@@ -63,8 +40,6 @@ const List = () => {
   useEffect(() => {
     fetchCars().then();
     setPageFromUrl();
-    // every second update timer
-    setInterval(updateTimers, 1000);
   }, []);
 
   const fetchCars = async () => {
@@ -74,10 +49,6 @@ const List = () => {
       if (!cars) {
         return;
       }
-      for (let car of cars) {
-        tempTimers.push(car.biddingInfo.sellingTime);
-      }
-      updateTimers();
       setCars(cars);
     });
     getCarsCount().then((c) =>
@@ -87,10 +58,6 @@ const List = () => {
 
   const carWasAddedEvent = () => {
     fetchCars().then();
-  };
-
-  const bidWasAddedEvent = () => {
-    //asdf
   };
 
   const handleChangePagination = (e, p) => {
@@ -142,63 +109,7 @@ const List = () => {
         <>
           <div className="grid-container" data-testid="List">
             {cars.map((car, index) => (
-              <Card
-                key={car.id}
-                sx={{
-                  width: "19vw",
-                  margin: 1,
-                  justifyContent: "space-between",
-                }}
-                className="card"
-              >
-                <CardMedia>
-                  <CarGallery images={car.pictures} />
-                </CardMedia>
-                <CardContent>
-                  <Link to={`/details/${car.id}`} className="link">
-                    <Typography
-                      className="fw-bold"
-                      gutterBottom
-                      component="div"
-                    >
-                      {car.fabricationYear} {car.brand} {car.model}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {car.fuelType}, {car.engineSize}, {car.fabricationYear},{" "}
-                      {car.transmissionType}, {car.power}, {car.numberOfSeats}{" "}
-                      seats, {car.color}
-                    </Typography>
-                  </Link>
-                </CardContent>
-                <CardActions className="auction">
-                  <div className="row w-100 align-items-center">
-                    <span
-                      className="col-4 text-center text-nowrap"
-                      style={{ paddingLeft: 20 }}
-                    >
-                      <MdTimer />
-                      {timers[index]}
-                    </span>
-                    <span className="col-4 text-center">
-                      {car.biddingInfo.currentPrice}$
-                    </span>
-                    <span className="col-4" style={{ textAlign: "right" }}>
-                      <Button
-                        variant="outlined"
-                        onClick={handleClickOpenBidDialog}
-                      >
-                        Bid
-                      </Button>
-                      <BidDialog
-                        open={openBidDialog}
-                        setOpenBidDialog={setOpenBidDialog}
-                        bidWasAddedEvent={bidWasAddedEvent}
-                        car={car}
-                      />
-                    </span>
-                  </div>
-                </CardActions>
-              </Card>
+              <Card key={car.id} car={car} />
             ))}
           </div>
         </>
@@ -246,29 +157,5 @@ const List = () => {
     </>
   );
 };
-
-class CarGallery extends React.Component {
-  render() {
-    const { images } = this.props;
-
-    return (
-      <>
-        {!images || images.length === 0 ? (
-          // @ts-ignore
-          <img alt="" src={require("./default-car.jpg")} height="220" />
-        ) : (
-          <ImageGallery
-            items={images.map((image) => ({
-              original: image.file,
-            }))}
-            showBullets={true}
-            showPlayButton={false}
-            showFullscreenButton={false}
-          />
-        )}
-      </>
-    );
-  }
-}
 
 export default List;

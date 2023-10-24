@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
@@ -26,11 +25,16 @@ const BidDialog = (props) => {
           },
         }}
       >
-        <DialogTitle id="alert-dialog-title">Bid Vehicle <span className="fw-bold">{props.car.model}</span></DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          Bid Vehicle{" "}
+          <span className="fw-bold">
+            {props.car.fabricationYear} {props.car.brand} {props.car.model}
+          </span>
+        </DialogTitle>
         <DialogContent>
           <div>Are you sure you want to make the bid?</div>
-          <div>
-            <TextField>5000</TextField>
+          <div className="mt-3">
+            <TextField defaultValue={props.newPrice || props.car.biddingInfo.currentPrice}></TextField>
           </div>
         </DialogContent>
         <DialogActions>
