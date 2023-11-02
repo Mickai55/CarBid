@@ -40,19 +40,21 @@ const Details = (props) => {
   };
 
   const carWasEditedEvent = () => {
+    props.setOpenCarWasEditedSnack(true);
     fetchCar();
   };
 
   useEffect(() => {
     fetchCar();
     setInterval(updateTimer, 1000);
-  }, [routeParams]);
+  }, []);
 
   const fetchCar = () => {
     getCar(routeParams.id).then((r) => {
-      console.log(r);
       setCar(r);
-      setNewPrice(r.biddingInfo.currentPrice);
+      if (r) {
+        setNewPrice(r.biddingInfo.currentPrice);
+      }
       carRef.current = r;
       updateTimer();
     });
@@ -60,6 +62,7 @@ const Details = (props) => {
 
   function handleDeleteCar() {
     if (window.confirm("Are you sure?")) {
+      props.setOpenCarWasDeletedSnack(true);
       deleteCar(car.id).then(() => navigate("/list", { replace: true }));
     }
   }

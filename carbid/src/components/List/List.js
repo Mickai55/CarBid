@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Card from "./Card/Card";
 
-const List = () => {
+const List = (props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [pageLoading, setPageLoading] = useState(true);
   const [pageError, setPageError] = useState(true);
@@ -57,7 +57,9 @@ const List = () => {
   };
 
   const carWasAddedEvent = () => {
-    fetchCars().then();
+    fetchCars().then(() => {
+      props.setOpenCarWasAddedSnack(true);
+    });
   };
 
   const handleChangePagination = (e, p) => {

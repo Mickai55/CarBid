@@ -60,7 +60,7 @@ const userAuth = (req, res, next) => {
 router.post("/register", async (req, res) => {
   const { username, password } = req.body;
   if (password.length < 6) {
-    return res.send({ message: "Password less than 6 characters" }).status(400);
+    return res.status(400).send({ message: "Password less than 6 characters" });
   }
   try {
     let collection = await db.collection("users");

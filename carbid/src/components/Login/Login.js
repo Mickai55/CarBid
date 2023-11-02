@@ -1,4 +1,6 @@
+import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
 import TextField from "@mui/material/TextField";
 import { apiLogin } from "ServiceUsers";
 import React, { useState } from "react";
@@ -12,46 +14,49 @@ const Login = (props) => {
   const login = () => {
     apiLogin(username, password).then((ok) => {
       if (ok) {
+        props.setOpenLoginSnack(true);
         props.setIsLoggedIn(true);
-        navigate("/list", { replace: true })
+        navigate("/list", { replace: true });
       }
     });
   };
   return (
-    <div className="text-center">
-      <div className="h3 my-4">Login</div>
-      <div className="mb-2">
-        <TextField
-          label="Username"
-          variant="standard"
-          onChange={(event) => setUsername(event.target.value)}
-        />
+    <>
+      <div className="text-center">
+        <div className="h3 my-4">Login</div>
+        <div className="mb-2">
+          <TextField
+            label="Username"
+            variant="standard"
+            onChange={(event) => setUsername(event.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <TextField
+            type="password"
+            label="Password"
+            variant="standard"
+            onChange={(event) => setPassword(event.target.value)}
+            onKeyDown={(event) => event.keyCode === 13 && login()}
+          />
+        </div>
+        <div className="mb-4">
+          <Button
+            disabled={!username || !password}
+            onClick={() => {
+              login();
+            }}
+            variant="contained"
+            className=""
+          >
+            Login
+          </Button>
+        </div>
+        <div>
+          Or if you don't have an account <Link to="/register">Register</Link>
+        </div>
       </div>
-      <div className="mb-4">
-        <TextField
-          type="password"
-          label="Password"
-          variant="standard"
-          onChange={(event) => setPassword(event.target.value)}
-          onKeyDown={(event) => event.keyCode === 13 && login()}
-        />
-      </div>
-      <div className="mb-4">
-        <Button
-          disabled={!username || !password}
-          onClick={() => {
-            login();
-          }}
-          variant="contained"
-          className=""
-        >
-          Login
-        </Button>
-      </div>
-      <div>
-        Or if you don't have an account <Link to="/register">Register</Link>
-      </div>
-    </div>
+    </>
   );
 };
 

@@ -6,13 +6,22 @@ import { useNavigate } from "react-router-dom";
 
 const Register = (props) => {
   const navigate = useNavigate();
-  
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const register = () => {
-    apiRegister(username, password).then(() => navigate('/login', { replace: true })).catch(error => {console.log(error);});
+    apiRegister(username, password).then((ok) => {
+      if (ok) {
+        props.setOpenRegisterSnack(true);
+        navigate("/login", { replace: true });
+      } else {
+        // setUsername("");
+        // setPassword("");
+        // setConfirmPassword("");
+      }
+    });
   };
   return (
     <>
