@@ -22,8 +22,8 @@ const Card = (props) => {
     setOpenBidDialog(true);
   };
 
-  const bidWasAddedEvent = () => {
-    //TODO
+  const bidWasAddedEvent = (sum) => {
+    console.log(sum);
   };
 
   const updateTimer = () => {

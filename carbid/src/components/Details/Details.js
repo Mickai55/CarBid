@@ -5,7 +5,7 @@ import "./Details.css";
 import { MdTimer } from "react-icons/md";
 import { formatTime } from "Helpers";
 import Button from "@mui/material/Button";
-import { deleteCar, getCar } from "ServiceCars";
+import { apiDeleteCar, apiGetCar } from "services/ServiceCars";
 import { useNavigate, useParams } from "react-router-dom";
 import CarAddDialog from "../List/CarAddDialog/CarAddDialog";
 import { LinearProgress } from "@mui/material";
@@ -15,7 +15,7 @@ const Details = (props) => {
   const routeParams = useParams();
   const [openCarDialog, setOpenCarDialog] = useState(false);
   const [openBidDialog, setOpenBidDialog] = useState(false);
-  const [newPrice, setNewPrice] = useState('');
+  const [newPrice, setNewPrice] = useState("");
   const [timer, setTimer] = useState("");
   const [car, setCar] = useState(null);
   const carRef = useRef(null);
@@ -31,8 +31,8 @@ const Details = (props) => {
     setOpenBidDialog(true);
   };
 
-  const bidWasAddedEvent = () => {
-    //TODO
+  const bidWasAddedEvent = (sum) => {
+    console.log(sum);
   };
 
   const handleClickOpenCarDialog = () => {
@@ -50,10 +50,10 @@ const Details = (props) => {
   }, []);
 
   const fetchCar = () => {
-    getCar(routeParams.id).then((r) => {
+    apiGetCar(routeParams.id).then((r) => {
       setCar(r);
       if (r) {
-        setNewPrice(r.biddingInfo.currentPrice);
+        setNewPrice(parseInt(r.biddingInfo.currentPrice) + 50);
       }
       carRef.current = r;
       updateTimer();
@@ -63,7 +63,7 @@ const Details = (props) => {
   function handleDeleteCar() {
     if (window.confirm("Are you sure?")) {
       props.setOpenCarWasDeletedSnack(true);
-      deleteCar(car.id).then(() => navigate("/list", { replace: true }));
+      apiDeleteCar(car.id).then(() => navigate("/list", { replace: true }));
     }
   }
 
@@ -130,11 +130,17 @@ const Details = (props) => {
                   type="number"
                   className="new-price"
                   defaultValue={newPrice}
-                  onChange={(e) => setNewPrice(e.target.value) }
+                  onChange={(e) => setNewPrice(e.target.value)}
                   step={50}
                 ></input>
                 {/* cannot be lower than current value */}
-                <Button variant="contained" onClick={handleClickOpenBidDialog}>Bid</Button>
+                <Button
+                  disabled={newPrice <= car.biddingInfo.currentPrice}
+                  variant="contained"
+                  onClick={handleClickOpenBidDialog}
+                >
+                  Bid
+                </Button>
                 {openBidDialog && (
                   <BidDialog
                     open={openBidDialog}

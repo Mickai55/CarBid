@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { apiLogin, apiRegister } from "ServiceUsers";
+import { apiRegister } from "services/ServiceUsers";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import "./loadEnvironment.mjs";
 import cars from "./routes/cars.mjs"
 import users from './routes/users.mjs'
+import bids from './routes/bids.mjs'
 
 const PORT = process.env.PORT || 5050;
 const app = express();
@@ -15,6 +16,7 @@ app.use(cookieParser());
 
 app.use("/cars", cars);
 app.use("/auth", users);
+app.use("/bids", bids);
 
 // start the Express server
 app.listen(PORT, () => {

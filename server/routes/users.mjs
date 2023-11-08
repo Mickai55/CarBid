@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 const router = express.Router();
 const jwtSecret = process.env.SECRET_KEY;
 
-const adminAuth = (req, res, next) => {
+export const adminAuth = (req, res, next) => {
   const auth = req.headers.authorization;
   if (!auth) {
     return res.status(401).json({ message: `Not authenticated.` });
@@ -36,18 +36,20 @@ const adminAuth = (req, res, next) => {
   }
 };
 
-const userAuth = (req, res, next) => {
-  const token = req.cookies.jwt;
+export const userAuth = (req, res, next) => {
+  const auth = req.headers.authorization;
+  if (!auth) {
+    return res.status(401).json({ message: `Not authenticated.` });
+  }
+  const token = auth.split(" ")[1];
   if (token) {
     jwt.verify(token, jwtSecret, (err, decodedToken) => {
       if (err) {
-        return res.status(401).json({ message: "Not authorized" });
+        return res
+          .status(401)
+          .json({ message: `Not authorized, error: ${err}` });
       } else {
-        if (decodedToken.role !== "Admin") {
-          return res.status(401).json({ message: "Not authorized" });
-        } else {
-          next();
-        }
+        next();
       }
     });
   } else {
@@ -180,7 +182,6 @@ router.get("/users", adminAuth, async (req, res, next) => {
 
 router.put("/update", adminAuth, async (req, res, next) => {
   const { role, id } = req.body;
-  console.log(role, id);
   if (role && id) {
     let collection = await db.collection("users");
     let query = {

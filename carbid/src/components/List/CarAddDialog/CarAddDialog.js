@@ -10,7 +10,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import React, { useEffect, useState } from "react";
-import { addCar, editCar } from "ServiceCars";
+import { apiAddCar, apiEditCar } from "services/ServiceCars";
 import { BsFillTrashFill } from "react-icons/bs";
 import { IconButton } from "@mui/material";
 import { currencies, popularCarCompanies } from "../../../Helpers";
@@ -55,12 +55,12 @@ const CarAddDialog = (props) => {
       car.currentPrice = props.car.biddingInfo.currentPrice;
       car.bodyType = "";
       car.description = "";
-      editCar(car).then(() => props.carWasEditedEvent());
+      apiEditCar(car).then(() => props.carWasEditedEvent());
     }
   };
 
   function onSubmit(car) {
-    addCar(car).then(() => props.carWasAddedEvent());
+    apiAddCar(car).then(() => props.carWasAddedEvent());
   }
 
   const handleFileEvent = (e) => {

@@ -10,7 +10,6 @@ router.get("/count", async (req, res) => {
   res.send({count: results.length}).status(200);
 });
 
-// This section will help you get a list of all the cars.
 router.get("/", async (req, res) => {
   let collection = await db.collection("cars");
   let cars = await collection.find({}).toArray();
@@ -55,7 +54,6 @@ router.get("/", async (req, res) => {
   res.send(cars).status(200);
 });
 
-// This section will help you create a new car.
 router.post("/", async (req, res) => {
   let newDocument = {
     id: req.body.id,
@@ -86,7 +84,6 @@ router.post("/", async (req, res) => {
   res.send(result).status(204);
 });
 
-// This section will help you get a list of all the available filters. 
 router.get("/filters/all", async (req, res) => {
   let collection = await db.collection("cars");
   let results = await collection.find({}).toArray();
@@ -108,7 +105,6 @@ router.get("/filters/all", async (req, res) => {
   res.send(resp).status(200);
 });
 
-// This section will help you get a single car by id
 router.get("/:id", async (req, res) => {
   let collection = await db.collection("cars");
   let query = {id: req.params.id};
@@ -118,7 +114,6 @@ router.get("/:id", async (req, res) => {
   else res.send(result).status(200);
 });
 
-// This section will help you update a car by id.
 router.patch("/:id", async (req, res) => {
   let query = {id: req.params.id};
   const updates =  {
@@ -154,7 +149,6 @@ router.patch("/:id", async (req, res) => {
   res.send(result).status(200);
 });
 
-// This section will help you delete a car
 router.delete("/:id", async (req, res) => {
   let query = {id: req.params.id};
 

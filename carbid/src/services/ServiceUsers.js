@@ -1,4 +1,6 @@
-const baseUrl = "http://localhost:5050/auth";
+import { url } from "Helpers";
+
+const baseUrl = url + "/auth";
 
 export const apiRegister = async (username, password) => {
   try {

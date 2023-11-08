@@ -1,4 +1,4 @@
-import { apiDeleteUser, apiGetUsers, apiUpdateUserRole } from "ServiceUsers";
+import { apiDeleteUser, apiGetUsers, apiUpdateUserRole } from "services/ServiceUsers";
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import TextField from "@mui/material/TextField";
@@ -90,6 +90,9 @@ const AdminPage = () => {
         </div>
       ) : (
         <>
+          <div className="text-center">
+            <div className="h3 my-2 mb-3">Users</div>
+          </div>
           <div style={{ height: "100%", width: "100%" }}>
             <DataGrid
               rows={users}

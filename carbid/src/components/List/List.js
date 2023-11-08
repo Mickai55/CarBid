@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import { LinearProgress, Pagination } from "@mui/material";
 import CarAddDialog from "./CarAddDialog/CarAddDialog";
 import { useSearchParams } from "react-router-dom";
-import { getCars, getCarsCount, getFilters } from "ServiceCars";
+import { apiGetCars, apiGetCarsCount, apiGetFilters } from "services/ServiceCars";
 import Filter from "./Filter/Filter";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
@@ -44,14 +44,14 @@ const List = (props) => {
 
   const fetchCars = async () => {
     setPageLoading(true);
-    await getCars(Object.fromEntries([...searchParams])).then((cars) => {
+    await apiGetCars(Object.fromEntries([...searchParams])).then((cars) => {
       setPageLoading(false);
       if (!cars) {
         return;
       }
       setCars(cars);
     });
-    getCarsCount().then((c) =>
+    apiGetCarsCount().then((c) =>
       setNumberOfPages(Math.ceil(c.count / itemsPerPage))
     );
   };

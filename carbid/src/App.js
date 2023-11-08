@@ -8,7 +8,7 @@ import History from "components/History/History";
 import Login from "components/Login/Login";
 import Details from "components/Details/Details";
 import Register from "components/Register/Register";
-import { apiIsAdmin, apiLogout } from "ServiceUsers";
+import { apiIsAdmin, apiLogout } from "services/ServiceUsers";
 import AdminPage from "components/AdminPage/AdminPage";
 import Notifications from "components/Notifications/Notifications";
 
@@ -47,9 +47,11 @@ function App() {
               <Link to="/list" className="menu-item">
                 Bidding
               </Link>
-              <Link to="/history" className="menu-item">
-                History
-              </Link>
+              {isLoggedIn && (
+                <Link to="/history" className="menu-item">
+                  History
+                </Link>
+              )}
               {!isLoggedIn ? (
                 <Link to="/login" className="menu-item">
                   <span>

@@ -5,9 +5,26 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
+import { apiAddBid } from "services/ServiceBids";
 
 const BidDialog = (props) => {
-  const handleCloseDialog = () => {
+  const [newPrice, setNewPrice] = useState(
+    props.newPrice || parseInt(props.car.biddingInfo.currentPrice) + 50
+  );
+
+  const handleCloseDialog = (confirmed) => {
+    if (confirmed) {
+      const bid = {
+        id: props.car.id,
+        carName: `${props.car.fabricationYear} ${props.car.brand} ${props.car.model}`,
+        user: localStorage.user,
+        price: newPrice,
+        date: new Date().toISOString(),
+      }
+      apiAddBid(bid).then(() => {
+        props.bidWasAddedEvent(parseInt(newPrice));
+      })
+    }
     props.setOpenBidDialog(false);
   };
 
@@ -34,12 +51,32 @@ const BidDialog = (props) => {
         <DialogContent>
           <div>Are you sure you want to make the bid?</div>
           <div className="mt-3">
-            <TextField defaultValue={props.newPrice || props.car.biddingInfo.currentPrice}></TextField>
+            <TextField
+              type="number"
+              inputProps={{
+                step: "50",
+              }}
+              defaultValue={
+                props.newPrice || newPrice
+              }
+              onChange={(c) => setNewPrice(c.target.value)}
+            ></TextField>
+          </div>
+          <div className="mt-3">
+            {newPrice <= props.car.biddingInfo.currentPrice && (
+              <div style={{ color: "red" }}>
+                The new sum must be larger than the one before
+              </div>
+            )}
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleCloseDialog} autoFocus>
+          <Button onClick={() => handleCloseDialog(false)}>Cancel</Button>
+          <Button
+            disabled={newPrice <= props.car.biddingInfo.currentPrice}
+            onClick={() => handleCloseDialog(true)}
+            autoFocus
+          >
             Confirm
           </Button>
         </DialogActions>

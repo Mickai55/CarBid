@@ -1,6 +1,8 @@
-const baseUrl = "http://localhost:5050/cars";
+import { url } from "Helpers";
 
-const getCars = async (searchParams) => {
+const baseUrl = url + "/cars";
+
+export const apiGetCars = async (searchParams) => {
   try {
     const queryString = Object.keys(searchParams)
       .map(
@@ -30,7 +32,7 @@ const getCars = async (searchParams) => {
   }
 };
 
-const getCarsCount = async (searchParams) => {
+export const apiGetCarsCount = async (searchParams) => {
   try {
     const url = `${baseUrl}/count`;
 
@@ -53,7 +55,7 @@ const getCarsCount = async (searchParams) => {
   }
 };
 
-const addCar = async (car) => {
+export const apiAddCar = async (car) => {
   try {
     const response = await fetch(`${baseUrl}`, {
       method: "POST",
@@ -64,7 +66,7 @@ const addCar = async (car) => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch data");
+      throw new Error("Failed to add car");
     }
   } catch (error) {
     window.alert(error);
@@ -72,7 +74,7 @@ const addCar = async (car) => {
   }
 };
 
-const getCar = async (id) => {
+export const apiGetCar = async (id) => {
   try {
     const response = await fetch(`${baseUrl}/${id}`, {
       method: "GET",
@@ -93,7 +95,7 @@ const getCar = async (id) => {
   }
 };
 
-const editCar = async (car) => {
+export const apiEditCar = async (car) => {
   try {
     const response = await fetch(`${baseUrl}/${car.id}`, {
       method: "PATCH",
@@ -112,7 +114,7 @@ const editCar = async (car) => {
   }
 };
 
-const deleteCar = async (id) => {
+export const apiDeleteCar = async (id) => {
   try {
     const response = await fetch(`${baseUrl}/${id}`, {
       method: "DELETE",
@@ -130,7 +132,7 @@ const deleteCar = async (id) => {
   }
 };
 
-const getFilters = async (id) => {
+export const apiGetFilters = async (id) => {
   try {
     const response = await fetch(`${baseUrl}/filters/all`, {
       method: "GET",
@@ -149,14 +151,4 @@ const getFilters = async (id) => {
     window.alert(error);
     return null;
   }
-};
-
-export {
-  getCars,
-  addCar,
-  getCar,
-  editCar,
-  deleteCar,
-  getFilters,
-  getCarsCount,
 };

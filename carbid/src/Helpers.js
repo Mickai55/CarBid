@@ -1,3 +1,5 @@
+export const url = 'http://localhost:5050';
+
 const carExample = {
   id: 1,
   brand: "Ford",
