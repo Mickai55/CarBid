@@ -21,6 +21,9 @@ const Notifications = (props) => {
   const handleCloseCarWasDeletedSnack = (event, reason) => {
     props.setOpenCarWasDeletedSnack(false);
   };
+  const handleCloseBidWasAddedSnack = (event, reason) => {
+    props.setOpenBidWasAddedSnack(false);
+  };
 
   return (
     <>
@@ -65,6 +68,13 @@ const Notifications = (props) => {
         onClose={handleCloseCarWasDeletedSnack}
       >
         <Alert severity="success">Car was deleted!</Alert>
+      </Snackbar>
+      <Snackbar
+        open={props.openBidWasAddedSnack}
+        autoHideDuration={6000}
+        onClose={handleCloseBidWasAddedSnack}
+      >
+        <Alert severity="success">Bid was added!</Alert>
       </Snackbar>
     </>
   );

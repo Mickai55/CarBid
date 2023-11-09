@@ -21,6 +21,7 @@ router.get("/:user", userAuth, async (req, res) => {
 router.post("/", userAuth, async (req, res) => {
   let newDocument = {
     id: req.body.id,
+    carId: req.body.carId,
     carName: req.body.carName,
     user: req.body.user,
     price: req.body.price,

@@ -32,7 +32,7 @@ const Details = (props) => {
   };
 
   const bidWasAddedEvent = (sum) => {
-    console.log(sum);
+    props.setOpenBidWasAddedSnack(true);
   };
 
   const handleClickOpenCarDialog = () => {

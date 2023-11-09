@@ -22,6 +22,7 @@ function App() {
   const [openCarWasAddedSnack, setOpenCarWasAddedSnack] = useState(false);
   const [openCarWasEditedSnack, setOpenCarWasEditedSnack] = useState(false);
   const [openCarWasDeletedSnack, setOpenCarWasDeletedSnack] = useState(false);
+  const [openBidWasAddedSnack, setOpenBidWasAddedSnack] = useState(false);
 
   useEffect(() => {
     if (localStorage.user) {
@@ -94,7 +95,10 @@ function App() {
               <Route
                 path="/list"
                 element={
-                  <List setOpenCarWasAddedSnack={setOpenCarWasAddedSnack} />
+                  <List
+                    setOpenCarWasAddedSnack={setOpenCarWasAddedSnack}
+                    setOpenBidWasAddedSnack={setOpenBidWasAddedSnack}
+                  />
                 }
               />
               <Route path="/history" element={<History />} />
@@ -125,6 +129,7 @@ function App() {
                   <Details
                     setOpenCarWasEditedSnack={setOpenCarWasEditedSnack}
                     setOpenCarWasDeletedSnack={setOpenCarWasDeletedSnack}
+                    setOpenBidWasAddedSnack={setOpenBidWasAddedSnack}
                   />
                 }
               />
@@ -152,6 +157,8 @@ function App() {
         openCarWasEditedSnack={openCarWasEditedSnack}
         setOpenCarWasDeletedSnack={setOpenCarWasDeletedSnack}
         openCarWasDeletedSnack={openCarWasDeletedSnack}
+        setOpenBidWasAddedSnack={setOpenBidWasAddedSnack}
+        openBidWasAddedSnack={openBidWasAddedSnack}
       />
     </>
   );

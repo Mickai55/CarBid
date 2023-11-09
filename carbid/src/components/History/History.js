@@ -14,12 +14,21 @@ const History = () => {
       flex: 1,
       renderCell: (params) => (
         <span>
-          <Link to={`/details/${params.row.id}`}>{params.row.carName}</Link>
+          <Link to={`/details/${params.row.carId}`}>{params.row.carName}</Link>
         </span>
       ),
     },
     { field: "price", headerName: "Price", flex: 1 },
-    { field: "date", headerName: "Date", flex: 1 },
+    {
+      field: "date",
+      headerName: "Date",
+      flex: 1,
+      renderCell: (params) => (
+        <span>
+          {new Date(params.row.date).toLocaleString()}
+        </span>
+      ),
+    },
   ];
 
   useEffect(() => {

@@ -111,7 +111,7 @@ const List = (props) => {
         <>
           <div className="grid-container" data-testid="List">
             {cars.map((car, index) => (
-              <Card key={car.id} car={car} />
+              <Card key={car.id} car={car} setOpenBidWasAddedSnack={props.setOpenBidWasAddedSnack} />
             ))}
           </div>
         </>

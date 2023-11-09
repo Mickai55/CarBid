@@ -15,7 +15,8 @@ const BidDialog = (props) => {
   const handleCloseDialog = (confirmed) => {
     if (confirmed) {
       const bid = {
-        id: props.car.id,
+        id: props.car.id + new Date().toISOString(),
+        carId: props.car.id,
         carName: `${props.car.fabricationYear} ${props.car.brand} ${props.car.model}`,
         user: localStorage.user,
         price: newPrice,
