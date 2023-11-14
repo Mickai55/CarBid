@@ -5,7 +5,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
-import { apiAddBid } from "services/ServiceBids";
+import { apiAddBid, apiRaiseBid } from "services/ServiceBids";
 
 const BidDialog = (props) => {
   const [newPrice, setNewPrice] = useState(
@@ -13,7 +13,7 @@ const BidDialog = (props) => {
   );
 
   const handleCloseDialog = (confirmed) => {
-    if (confirmed) {
+    if (confirmed === true) {
       const bid = {
         id: props.car.id + new Date().toISOString(),
         carId: props.car.id,
@@ -23,7 +23,17 @@ const BidDialog = (props) => {
         date: new Date().toISOString(),
       }
       apiAddBid(bid).then(() => {
-        props.bidWasAddedEvent(parseInt(newPrice));
+        apiRaiseBid(bid.carId, bid.price).then((ok) => {
+          if (!ok) {
+            return;
+          }
+          if (document.URL.includes('details')) {
+            props.fetchCar();
+          } else {
+            props.fetchCars();
+          }
+          props.bidWasAddedEvent(parseInt(newPrice));
+        })
       })
     }
     props.setOpenBidDialog(false);
@@ -33,7 +43,7 @@ const BidDialog = (props) => {
     <>
       <Dialog
         open={props.open}
-        onClose={handleCloseDialog}
+        onClose={() => handleCloseDialog(false)}
         sx={{
           "& .MuiDialog-container": {
             "& .MuiPaper-root": {

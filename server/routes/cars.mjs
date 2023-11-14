@@ -7,7 +7,7 @@ router.get("/count", async (req, res) => {
   let collection = await db.collection("cars");
   let results = await collection.find({}).toArray();
 
-  res.send({count: results.length}).status(200);
+  res.status(200).send({count: results.length});
 });
 
 router.get("/", async (req, res) => {
@@ -51,7 +51,7 @@ router.get("/", async (req, res) => {
 
   cars = cars.slice((page - 1) * perPage, page * perPage)
 
-  res.send(cars).status(200);
+  res.status(200).send(cars);
 });
 
 router.post("/", async (req, res) => {
@@ -81,7 +81,7 @@ router.post("/", async (req, res) => {
   };
   let collection = await db.collection("cars");
   let result = await collection.insertOne(newDocument);
-  res.send(result).status(204);
+  res.status(204).send(result);
 });
 
 router.get("/filters/all", async (req, res) => {
@@ -102,16 +102,19 @@ router.get("/filters/all", async (req, res) => {
 
   const resp = ({availableYears, availableBrands, availableTransmissions, availableEngineSizes})
 
-  res.send(resp).status(200);
+  res.status(200).send(resp);
 });
 
 router.get("/:id", async (req, res) => {
   let collection = await db.collection("cars");
   let query = {id: req.params.id};
   let result = await collection.findOne(query);
+  console.log(result);
 
-  if (!result) res.send("Not found").status(404);
-  else res.send(result).status(200);
+  if (!result) {
+    return res.status(404).send({ message: "Not found"});
+  }
+  return res.status(200).send(result);
 });
 
 router.patch("/:id", async (req, res) => {
@@ -146,7 +149,7 @@ router.patch("/:id", async (req, res) => {
   let collection = await db.collection("cars");
   let result = await collection.updateOne(query, updates);
 
-  res.send(result).status(200);
+  res.status(200).send(result);
 });
 
 router.delete("/:id", async (req, res) => {
@@ -155,7 +158,7 @@ router.delete("/:id", async (req, res) => {
   const collection = db.collection("cars");
   let result = await collection.deleteOne(query);
 
-  res.send(result).status(200);
+  res.status(200).send(result);
 });
 
 export default router;

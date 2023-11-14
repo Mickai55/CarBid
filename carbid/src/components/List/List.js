@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import { LinearProgress, Pagination } from "@mui/material";
 import CarAddDialog from "./CarAddDialog/CarAddDialog";
 import { useSearchParams } from "react-router-dom";
-import { apiGetCars, apiGetCarsCount, apiGetFilters } from "services/ServiceCars";
+import { apiGetCars, apiGetCarsCount } from "services/ServiceCars";
 import Filter from "./Filter/Filter";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
@@ -13,7 +13,6 @@ import Card from "./Card/Card";
 const List = (props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [pageLoading, setPageLoading] = useState(true);
-  const [pageError, setPageError] = useState(true);
 
   const [cars, setCars] = useState([]);
   const [openCarDialog, setOpenCarDialog] = useState(false);
@@ -38,7 +37,7 @@ const List = (props) => {
   }
 
   useEffect(() => {
-    fetchCars().then();
+    fetchCars();
     setPageFromUrl();
   }, []);
 
@@ -87,13 +86,17 @@ const List = (props) => {
       <div className="d-flex justify-content-between align-items-center">
         <div></div>
         <div className="h3 my-2">Auctions in progress</div>
-        <Button
-          onClick={handleClickOpenCarDialog}
-          variant="contained"
-          className="me-3"
-        >
-          Add Car
-        </Button>
+        {props.isLoggedIn ? (
+          <Button
+            onClick={handleClickOpenCarDialog}
+            variant="contained"
+            className="me-3"
+          >
+            Add Car
+          </Button>
+        ) : (
+          <div></div>
+        )}
         <CarAddDialog
           open={openCarDialog}
           setOpenCarDialog={setOpenCarDialog}
@@ -111,7 +114,12 @@ const List = (props) => {
         <>
           <div className="grid-container" data-testid="List">
             {cars.map((car, index) => (
-              <Card key={car.id} car={car} setOpenBidWasAddedSnack={props.setOpenBidWasAddedSnack} />
+              <Card
+                key={car.id}
+                car={car}
+                setOpenBidWasAddedSnack={props.setOpenBidWasAddedSnack}
+                fetchCars={fetchCars}
+              />
             ))}
           </div>
         </>

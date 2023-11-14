@@ -217,7 +217,7 @@ router.delete("/delete", adminAuth, async (req, res) => {
   const collection = db.collection("users");
   let user = await collection.deleteOne(query);
   try {
-    res.send(user).status(200);
+    res.status(200).send(user);
   } catch (error) {
     res
       .status(400)
@@ -257,6 +257,6 @@ router.get("/admin", (req, res) => {
   }
 });
 
-router.get("/basic", userAuth, (req, res) => res.send("User Route"));
+router.get("/basic", userAuth, (req, res) => res.status(200).send("User Route"));
 
 export default router;

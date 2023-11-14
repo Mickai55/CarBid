@@ -221,7 +221,7 @@ const Filter = (props) => {
               <div className="ms-2">
                 <TextField
                   select
-                  label="Transmission Type"
+                  label="Trans. Type"
                   size="small"
                   defaultValue=""
                   value={transVal}

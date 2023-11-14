@@ -48,3 +48,25 @@ export const apiAddBid = async (bid) => {
     return null;
   }
 };
+
+export const apiRaiseBid = async (carId, price) => {
+  try {
+    const url = `${baseUrl}/raise`;
+
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.token}`,
+      },
+      body: JSON.stringify({carId, price}),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to add bid");
+    }
+  } catch (error) {
+    window.alert(error);
+    return null;
+  }
+}

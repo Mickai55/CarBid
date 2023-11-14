@@ -81,6 +81,7 @@ const Card = (props) => {
                 open={openBidDialog}
                 setOpenBidDialog={setOpenBidDialog}
                 bidWasAddedEvent={bidWasAddedEvent}
+                fetchCars={props.fetchCars}
                 car={props.car}
               />
             )}

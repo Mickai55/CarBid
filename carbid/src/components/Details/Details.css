@@ -24,7 +24,7 @@ td:nth-child(odd) {
 .auction-bidbar {
   display: flex;
   align-items: center;
-  background-color: #1b1f31f4;
+  background-color: var(--themeColor);
   border-radius: 5px;
   color: white;
   height: 50px;

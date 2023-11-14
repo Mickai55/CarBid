@@ -50,13 +50,15 @@ const Details = (props) => {
   }, []);
 
   const fetchCar = () => {
-    apiGetCar(routeParams.id).then((r) => {
-      setCar(r);
-      if (r) {
-        setNewPrice(parseInt(r.biddingInfo.currentPrice) + 50);
+    apiGetCar(routeParams.id).then((car) => {
+      if (car) {
+        setCar(car);
+        setNewPrice(parseInt(car.biddingInfo.currentPrice) + 50);
+        carRef.current = car;
+        updateTimer();
+      } else {
+        navigate("/list", { replace: true });
       }
-      carRef.current = r;
-      updateTimer();
     });
   };
 
@@ -148,6 +150,7 @@ const Details = (props) => {
                     bidWasAddedEvent={bidWasAddedEvent}
                     car={car}
                     newPrice={newPrice}
+                    fetchCar={fetchCar}
                   />
                 )}
               </div>

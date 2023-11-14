@@ -98,6 +98,7 @@ function App() {
                   <List
                     setOpenCarWasAddedSnack={setOpenCarWasAddedSnack}
                     setOpenBidWasAddedSnack={setOpenBidWasAddedSnack}
+                    isLoggedIn={isLoggedIn}
                   />
                 }
               />

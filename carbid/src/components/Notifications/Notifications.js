@@ -1,27 +1,27 @@
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
-import React, { useState } from "react";
+import React from "react";
 
 const Notifications = (props) => {
-  const handleCloseRegisterSnack = (event, reason) => {
+  const handleCloseRegisterSnack = () => {
     props.setOpenRegisterSnack(false);
   };
-  const handleCloseLogoutSnack = (event, reason) => {
+  const handleCloseLogoutSnack = () => {
     props.setOpenLogoutSnack(false);
   };
-  const handleCloseLoginSnack = (event, reason) => {
+  const handleCloseLoginSnack = () => {
     props.setOpenLoginSnack(false);
   };
-  const handleCloseCarWasAddedSnack = (event, reason) => {
+  const handleCloseCarWasAddedSnack = () => {
     props.setOpenCarWasAddedSnack(false);
   };
-  const handleCloseCarWasEditedSnack = (event, reason) => {
+  const handleCloseCarWasEditedSnack = () => {
     props.setOpenCarWasEditedSnack(false);
   };
-  const handleCloseCarWasDeletedSnack = (event, reason) => {
+  const handleCloseCarWasDeletedSnack = () => {
     props.setOpenCarWasDeletedSnack(false);
   };
-  const handleCloseBidWasAddedSnack = (event, reason) => {
+  const handleCloseBidWasAddedSnack = () => {
     props.setOpenBidWasAddedSnack(false);
   };
 
